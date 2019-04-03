@@ -66,3 +66,8 @@ def bootstrap():
     logger = bootstrap_to_logger()
     parse_args()
     return logger
+
+def bootstrap_args():
+    logger = bootstrap_to_logger()
+    args = parse_args()
+    return logger, args

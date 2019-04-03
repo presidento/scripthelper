@@ -25,10 +25,8 @@ It just works, and adds `--verbose` and `--quiet` command line options, too.
 ```python
 import scripthelper
 
-logger = scripthelper.bootstrap_to_logger()
-
 scripthelper.add_argument('-n', '--name', help='Name to greet')
-args = scripthelper.parse_args()
+logger, args = scripthelper.bootstrap_args()
 
 if args.name:
     logger.debug('Name was provided')
