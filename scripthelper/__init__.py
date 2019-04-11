@@ -27,7 +27,10 @@ def bootstrap_to_logger():
     logger.addHandler(log_handler)
     logger.setLevel(logging.INFO)
 
-    return logging.getLogger('__main__')
+    return get_logger()
+
+def get_logger(name='__main__'):
+    return verboselogs.VerboseLogger(name)
 
 def _set_verbosity(verbosity):
     levels = [
