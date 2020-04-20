@@ -53,3 +53,15 @@ for i in scripthelper.progressbar(range(200)):
     time.sleep(0.05)
 logger.info('Done')
 ```
+
+## You can easily log to file
+
+```python
+import scripthelper
+
+logger = scripthelper.bootstrap(log_file='debug.log')
+
+logger.warning('warning message')
+logger.info('info message')
+logger.debug('debug message')
+```

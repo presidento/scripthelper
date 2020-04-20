@@ -6,6 +6,7 @@ import tqdm
 import sys
 
 progressbar = tqdm.tqdm
+console_log_handler = None
 
 class TqdmLogHandler(logging.StreamHandler):
     def __init__(self):
@@ -15,17 +16,26 @@ class TqdmLogHandler(logging.StreamHandler):
         msg = self.format(record)
         tqdm.tqdm.write(msg)
 
-def bootstrap_to_logger():
+def bootstrap_to_logger(log_file=None):
+    global console_log_handler
     verboselogs.install()
     if sys.platform == 'win32':
         # In Windows the default black is black, which is invisible on the default terminal.
         coloredlogs.DEFAULT_FIELD_STYLES['levelname'] = {'color': 'blue'}
 
-    log_handler = TqdmLogHandler()
-    log_handler.setFormatter(coloredlogs.ColoredFormatter('%(levelname)s %(message)s'))
     logger = logging.getLogger()
-    logger.addHandler(log_handler)
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.DEBUG)
+
+    console_log_handler = TqdmLogHandler()
+    console_log_handler.setFormatter(coloredlogs.ColoredFormatter('%(levelname)s %(message)s'))
+    logger.addHandler(console_log_handler)
+
+    if log_file:
+        file_log_handler = logging.FileHandler(log_file)
+        formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+        file_log_handler.setFormatter(formatter)
+        file_log_handler.setLevel(logging.DEBUG)
+        logger.addHandler(file_log_handler) 
 
     return get_logger()
 
@@ -46,7 +56,9 @@ def _set_verbosity(verbosity):
     new_index = levels.index(default_level) + verbosity
     new_index = max(0, min(len(levels) - 1, new_index))
     log_level = levels[new_index]
-    logging.getLogger().setLevel(log_level)
+    if log_level < logging.DEBUG:
+        logging.getLogger().setLevel(log_level)
+    console_log_handler.setLevel(log_level)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-v', '--verbose', action='count',
@@ -65,12 +77,12 @@ def parse_args():
     logging.getLogger(__name__).debug('Arguments: %s', args)
     return args
 
-def bootstrap():
-    logger = bootstrap_to_logger()
+def bootstrap(log_file=None):
+    logger = bootstrap_to_logger(log_file)
     parse_args()
     return logger
 
-def bootstrap_args():
-    logger = bootstrap_to_logger()
+def bootstrap_args(log_file=None):
+    logger = bootstrap_to_logger(log_file)
     args = parse_args()
     return logger, args
