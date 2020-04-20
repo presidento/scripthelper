@@ -1,0 +1,15 @@
+## 1.3 / 2020-04-20
+
+- Add `log_file` parameter to bootstrap methods
+
+## 1.2 / 2019-04-11
+
+- Add `get_logger` method, which returns a `VerboseLogger` instance
+
+## 1.1 / 2019-04-03
+
+- Add `bootstrap_args` method if you want to handle custom arguments
+
+## 1.0 / 2019-03-28
+
+First release
