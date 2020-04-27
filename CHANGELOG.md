@@ -1,3 +1,8 @@
+## 1.4 / 2020-04-27
+
+- Add `setup_file_logging` method
+- Deprecate `log_file` parameter
+
 ## 1.3 / 2020-04-20
 
 - Add `log_file` parameter to bootstrap methods
