@@ -4,6 +4,9 @@ import logging
 import argparse
 import tqdm
 import sys
+import inspect
+import pathlib
+import warnings
 
 progressbar = tqdm.tqdm
 console_log_handler = None
@@ -31,11 +34,8 @@ def bootstrap_to_logger(log_file=None):
     logger.addHandler(console_log_handler)
 
     if log_file:
-        file_log_handler = logging.FileHandler(log_file)
-        formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-        file_log_handler.setFormatter(formatter)
-        file_log_handler.setLevel(logging.DEBUG)
-        logger.addHandler(file_log_handler) 
+        warnings.warn('The "log_file" parameter is deprecated. Use "setup_file_logging" method instead.')
+        setup_file_logging(level=logging.DEBUG, log_file=log_file)
 
     return get_logger()
 
@@ -65,6 +65,17 @@ parser.add_argument('-v', '--verbose', action='count',
         help='Increase verbosity. Can be applied multiple times, like -vv')
 parser.add_argument('-q', '--quiet', action='count',
         help='Decrease verbosity. Can be applied multiple times, like -qq')
+
+def setup_file_logging(*, level='INFO', filename=None):
+    if filename is None:
+        caller_module = inspect.getmodule(inspect.stack()[1][0])
+        filename = pathlib.Path(caller_module.__file__).with_suffix('.log')
+
+    file_log_handler = logging.FileHandler(filename)
+    formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+    file_log_handler.setFormatter(formatter)
+    file_log_handler.setLevel(level)
+    logging.getLogger().addHandler(file_log_handler) 
 
 def add_argument(*args, **kw):
     parser.add_argument(*args, **kw)

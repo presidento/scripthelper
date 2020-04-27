@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import scripthelper
 
-logger = scripthelper.bootstrap(log_file='debug.log')
+logger = scripthelper.bootstrap()
+scripthelper.setup_file_logging()
 
 logger.critical('critical message')
 logger.error('error message')

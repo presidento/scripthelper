@@ -104,4 +104,4 @@ venv.bak/
 .mypy_cache/
 
 # Example log file
-/debug.log
+/example5.log
