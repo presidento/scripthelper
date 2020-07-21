@@ -1,3 +1,7 @@
+## 1.5 / 2020-07-21
+
+- Explicitly set utf-8 encoding for logging file handler
+
 ## 1.4 / 2020-04-27
 
 - Add `setup_file_logging` method
