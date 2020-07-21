@@ -71,7 +71,7 @@ def setup_file_logging(*, level='INFO', filename=None):
         caller_module = inspect.getmodule(inspect.stack()[1][0])
         filename = pathlib.Path(caller_module.__file__).with_suffix('.log')
 
-    file_log_handler = logging.FileHandler(filename)
+    file_log_handler = logging.FileHandler(filename, encoding="utf-8")
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
     file_log_handler.setFormatter(formatter)
     file_log_handler.setLevel(level)
