@@ -66,3 +66,15 @@ logger.warning('warning message')
 logger.info('info message')
 logger.debug('debug message')
 ```
+
+## It handles exceptions, warnings
+
+```python
+import scripthelper
+import warnings
+
+scripthelper.bootstrap()
+
+warnings.warn("This user warning should be captured.")
+raise RuntimeError("This exception should be handled.")
+```

@@ -11,6 +11,8 @@ import warnings
 progressbar = tqdm.tqdm
 console_log_handler = None
 
+logger = logging.getLogger(__name__)
+
 class TqdmLogHandler(logging.StreamHandler):
     def __init__(self):
         logging.StreamHandler.__init__(self)
@@ -18,6 +20,15 @@ class TqdmLogHandler(logging.StreamHandler):
     def emit(self, record):
         msg = self.format(record)
         tqdm.tqdm.write(msg)
+
+def _exception_handler(exc_type, exc_value, exc_traceback):
+    if issubclass(exc_type, KeyboardInterrupt):
+        sys.__excepthook__(exc_type, exc_value, exc_traceback)
+        return
+
+    message = f"Uncaught {exc_type.__name__}: {exc_value}"
+    logger.critical(message, exc_info=exc_value)
+
 
 def bootstrap_to_logger(log_file=None):
     global console_log_handler
@@ -33,8 +44,11 @@ def bootstrap_to_logger(log_file=None):
     console_log_handler.setFormatter(coloredlogs.ColoredFormatter('%(levelname)s %(message)s'))
     logger.addHandler(console_log_handler)
 
+    sys.excepthook = _exception_handler
+    logging.captureWarnings(True)
+
     if log_file:
-        warnings.warn('The "log_file" parameter is deprecated. Use "setup_file_logging" method instead.')
+        warnings.warn('The "log_file" parameter is deprecated. Use "setup_file_logging" method instead.', DeprecationWarning)
         setup_file_logging(level=logging.DEBUG, log_file=log_file)
 
     return get_logger()
