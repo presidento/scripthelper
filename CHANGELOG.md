@@ -1,3 +1,7 @@
+## 1.6 / 2020-10-21
+
+- Handle uncaught exceptions, warnings
+
 ## 1.5 / 2020-07-21
 
 - Explicitly set utf-8 encoding for logging file handler
