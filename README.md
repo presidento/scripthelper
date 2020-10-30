@@ -54,7 +54,7 @@ for i in scripthelper.progressbar(range(200)):
 logger.info('Done')
 ```
 
-## You can easily preserve logs in a file
+## You can easily preserve logs in files
 
 ```python
 import scripthelper

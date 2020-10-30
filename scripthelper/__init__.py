@@ -1,6 +1,7 @@
 import coloredlogs
 import verboselogs
 import logging
+import logging.handlers
 import argparse
 import tqdm
 import sys
@@ -85,7 +86,8 @@ def setup_file_logging(*, level='INFO', filename=None):
         caller_module = inspect.getmodule(inspect.stack()[1][0])
         filename = pathlib.Path(caller_module.__file__).with_suffix('.log')
 
-    file_log_handler = logging.FileHandler(filename, encoding="utf-8")
+    file_log_handler = logging.handlers.RotatingFileHandler(filename,
+        encoding="utf-8", maxBytes=10*1024*1024, backupCount=9)
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
     file_log_handler.setFormatter(formatter)
     file_log_handler.setLevel(level)
