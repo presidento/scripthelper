@@ -1,3 +1,7 @@
+## 1.7 / 2020-10-21
+
+- Use RotatingFileHandler instead of simple FileHandler
+
 ## 1.6 / 2020-10-21
 
 - Handle uncaught exceptions, warnings
