@@ -1,3 +1,7 @@
+## 1.8 / 2020-12-01
+
+- Display variables in stacktrace, using `traceback_with_variables` module.
+
 ## 1.7 / 2020-10-21
 
 - Use RotatingFileHandler instead of simple FileHandler
