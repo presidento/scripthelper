@@ -23,5 +23,6 @@ setuptools.setup(
         "tqdm >= 4.31.1",
         "coloredlogs >= 10.0",
         "verboselogs >= 1.7",
+        "traceback_with_variables >= 1.1"
     ],
  )

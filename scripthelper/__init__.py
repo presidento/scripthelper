@@ -8,15 +8,55 @@ import sys
 import inspect
 import pathlib
 import warnings
+from traceback_with_variables.color import supports_ansi, choose_color_scheme
+from traceback_with_variables.core import iter_tb_lines, ColorScheme, ColorSchemes
 
 progressbar = tqdm.tqdm
 console_log_handler = None
 
 logger = logging.getLogger(__name__)
 
-class TqdmLogHandler(logging.StreamHandler):
+
+class CustomLogFormatter(coloredlogs.ColoredFormatter):
+    def __init__(self, format_str, *, colors):
+        self.colors = colors
+        super().__init__(
+            format_str,
+            level_styles=self._coloredlogs_styles(),
+            field_styles=self._coloredlogs_styles(),
+        )
+
+    def _coloredlogs_styles(self):
+        if self.colors:
+            return None  # Default value
+        else:
+            return {}  # Disable coloring
+
+    def formatException(self, stack_info):
+        if self.colors:
+            color_scheme = ColorSchemes.common
+        else:
+            color_scheme = ColorSchemes.none
+
+        lines = []
+        for line in iter_tb_lines(
+            e=stack_info[1],
+            tb=stack_info[2],
+            num_skipped_frames=1,
+            color_scheme=color_scheme,
+        ):
+            lines.append(line)
+        return "\n".join(lines)
+
+
+class ConsoleLogHandler(logging.StreamHandler):
     def __init__(self):
         logging.StreamHandler.__init__(self)
+        self.setFormatter(
+            CustomLogFormatter(
+                "%(levelname)s %(message)s", colors=supports_ansi(sys.stdout)
+            )
+        )
 
     def emit(self, record):
         msg = self.format(record)
@@ -41,8 +81,7 @@ def bootstrap_to_logger(log_file=None):
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
 
-    console_log_handler = TqdmLogHandler()
-    console_log_handler.setFormatter(coloredlogs.ColoredFormatter('%(levelname)s %(message)s'))
+    console_log_handler = ConsoleLogHandler()
     logger.addHandler(console_log_handler)
 
     sys.excepthook = _exception_handler
@@ -88,7 +127,7 @@ def setup_file_logging(*, level='INFO', filename=None):
 
     file_log_handler = logging.handlers.RotatingFileHandler(filename,
         encoding="utf-8", maxBytes=10*1024*1024, backupCount=9)
-    formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+    formatter = CustomLogFormatter("%(asctime)s %(levelname)s %(message)s", colors=False)
     file_log_handler.setFormatter(formatter)
     file_log_handler.setLevel(level)
     logging.getLogger().addHandler(file_log_handler) 

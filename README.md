@@ -75,6 +75,8 @@ import warnings
 
 scripthelper.bootstrap()
 
-warnings.warn("This user warning should be captured.")
+warnings.warn("This user warning will be captured.")
 raise RuntimeError("This exception should be handled.")
 ```
+
+(The local variables will be displayed in stack trace.)
