@@ -103,6 +103,8 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+.vscode
+
 # Example log file
 /example5.log
 /example5.log.*
