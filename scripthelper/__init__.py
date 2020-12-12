@@ -98,8 +98,10 @@ def bootstrap_to_logger(log_file=None):
     return get_logger()
 
 
-def get_logger(name="__main__"):
+def getLogger(name="__main__"):
     return verboselogs.VerboseLogger(name)
+
+get_logger = getLogger
 
 
 def _set_verbosity(verbosity):

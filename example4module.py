@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import scripthelper
 
-logger = scripthelper.get_logger(__name__)
+logger = scripthelper.getLogger(__name__)
 
 
 def do_the_things():
