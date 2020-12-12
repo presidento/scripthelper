@@ -8,10 +8,14 @@ import sys
 import inspect
 import pathlib
 import warnings
+import prettyprinter
 from traceback_with_variables.color import supports_ansi, choose_color_scheme
 from traceback_with_variables.core import iter_tb_lines, ColorScheme, ColorSchemes
 
 progressbar = tqdm.tqdm
+pp = prettyprinter.cpprint
+pprint = pp
+
 console_log_handler = None
 
 logger = logging.getLogger(__name__)
@@ -74,6 +78,9 @@ def _exception_handler(exc_type, exc_value, exc_traceback):
 
 def bootstrap_to_logger(log_file=None):
     global console_log_handler
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        prettyprinter.install_extras()
     verboselogs.install()
     if sys.platform == "win32":
         # In Windows the default black is black, which is invisible on the default terminal.

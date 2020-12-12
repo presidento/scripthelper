@@ -80,3 +80,14 @@ raise RuntimeError("This exception should be handled.")
 ```
 
 (The local variables will be displayed in stack trace.)
+
+## Has built-in colored pretty printer
+
+```python
+something = {
+    "bool": True,
+    "none": None,
+    "integer": 1234,
+}
+scripthelper.pp(something)
+```

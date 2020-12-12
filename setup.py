@@ -24,5 +24,6 @@ setuptools.setup(
         "coloredlogs >= 10.0",
         "verboselogs >= 1.7",
         "traceback_with_variables >= 1.1",
+        "prettyprinter >= 0.18.0",
     ],
 )

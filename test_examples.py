@@ -213,5 +213,23 @@ class TestExamples(unittest.TestCase):
         )
 
 
+    def test_example7(self):
+        self.assert_output(
+            "example7.py",
+            textwrap.dedent(
+                """
+                {
+                    'string': 'value1',
+                    'bool': True,
+                    'none': None,
+                    'integer': 1234,
+                    'item': Item(name='name', value=999)
+                }
+                """
+            ),
+            subprocess_check=False,
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
