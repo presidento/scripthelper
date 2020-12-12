@@ -1,3 +1,8 @@
+## 1.9 / 2020-12-12
+
+- Add colored pretty printer support
+- Add getLogger method, use that by default instead of get_logger
+
 ## 1.8 / 2020-12-01
 
 - Display variables in stacktrace, using `traceback_with_variables` module.
