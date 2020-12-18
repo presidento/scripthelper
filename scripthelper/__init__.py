@@ -9,17 +9,26 @@ import inspect
 import pathlib
 import warnings
 import prettyprinter
+import colorful
 from traceback_with_variables.color import supports_ansi, choose_color_scheme
 from traceback_with_variables.core import iter_tb_lines, ColorScheme, ColorSchemes
 
 progressbar = tqdm.tqdm
-pp = prettyprinter.cpprint
-pprint = pp
 
 console_log_handler = None
+_force_colors = None
+_console_verbosity = 0
 
 logger = logging.getLogger(__name__)
 
+
+def pprint(*args, **kwargs):
+    if _with_colors():
+        prettyprinter.cpprint(*args, **kwargs)
+    else:
+        prettyprinter.pprint(*args, **kwargs)
+
+pp = pprint
 
 class CustomLogFormatter(coloredlogs.ColoredFormatter):
     def __init__(self, format_str, *, colors):
@@ -57,9 +66,7 @@ class ConsoleLogHandler(logging.StreamHandler):
     def __init__(self):
         logging.StreamHandler.__init__(self)
         self.setFormatter(
-            CustomLogFormatter(
-                "%(levelname)s %(message)s", colors=supports_ansi(sys.stdout)
-            )
+            CustomLogFormatter("%(levelname)s %(message)s", colors=_with_colors())
         )
 
     def emit(self, record):
@@ -81,6 +88,9 @@ def bootstrap_to_logger(log_file=None):
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         prettyprinter.install_extras()
+        if _force_colors == True:
+            # Hack for pretty printer
+            colorful.colorful.use_16_ansi_colors()
     verboselogs.install()
     if sys.platform == "win32":
         # In Windows the default black is black, which is invisible on the default terminal.
@@ -90,6 +100,7 @@ def bootstrap_to_logger(log_file=None):
     logger.setLevel(logging.DEBUG)
 
     console_log_handler = ConsoleLogHandler()
+    _set_verbosity()
     logger.addHandler(console_log_handler)
 
     sys.excepthook = _exception_handler
@@ -111,7 +122,7 @@ def getLogger(name="__main__"):
 get_logger = getLogger
 
 
-def _set_verbosity(verbosity):
+def _set_verbosity():
     levels = [
         logging.ERROR,
         logging.WARNING,
@@ -122,12 +133,18 @@ def _set_verbosity(verbosity):
     ]
     default_level = logging.INFO
 
-    new_index = levels.index(default_level) + verbosity
+    new_index = levels.index(default_level) + _console_verbosity
     new_index = max(0, min(len(levels) - 1, new_index))
     log_level = levels[new_index]
     if log_level < logging.DEBUG:
         logging.getLogger().setLevel(log_level)
     console_log_handler.setLevel(log_level)
+
+
+def _with_colors():
+    if _force_colors is not None:
+        return _force_colors
+    return supports_ansi(sys.stdout)
 
 
 parser = argparse.ArgumentParser()
@@ -142,6 +159,18 @@ parser.add_argument(
     "--quiet",
     action="count",
     help="Decrease verbosity. Can be applied multiple times, like -qq",
+)
+parser.add_argument(
+    "--colors",
+    action="store_true",
+    default=None,
+    help="Force set colored output",
+)
+parser.add_argument(
+    "--no-colors",
+    action="store_false",
+    dest="colors",
+    help="Force set no-colored output",
 )
 
 
@@ -165,22 +194,17 @@ def add_argument(*args, **kw):
     parser.add_argument(*args, **kw)
 
 
-def parse_args():
-    args = parser.parse_args()
-    verbose_count = args.verbose or 0
-    quiet_count = args.quiet or 0
-    _set_verbosity(verbose_count - quiet_count)
-    logging.getLogger(__name__).debug("Arguments: %s", args)
-    return args
-
-
 def bootstrap(log_file=None):
-    logger = bootstrap_to_logger(log_file)
-    parse_args()
+    logger, _ = bootstrap_args(log_file)
     return logger
 
 
 def bootstrap_args(log_file=None):
+    global _force_colors
+    global _console_verbosity
+    args = parser.parse_args()
+    _force_colors = args.colors
+    _console_verbosity = (args.verbose or 0) - (args.quiet or 0)
     logger = bootstrap_to_logger(log_file)
-    args = parse_args()
+    logging.getLogger(__name__).debug("Arguments: %s", args)
     return logger, args

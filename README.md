@@ -18,7 +18,9 @@ logger.debug('debug message')
 logger.spam('spam message')
 ```
 
-It just works, and adds `--verbose` and `--quiet` command line options, too.
+It just works. Try `--verbose` and `--quiet`  command line options, too.
+It uses colored log messages on a terminal.
+See `--help` for more information.
 
 ## Adding other command line parameters
 
@@ -84,6 +86,8 @@ raise RuntimeError("This exception should be handled.")
 ## Has built-in colored pretty printer
 
 ```python
+import scripthelper
+
 something = {
     "bool": True,
     "none": None,

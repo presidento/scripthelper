@@ -33,27 +33,14 @@ class TestExamples(unittest.TestCase):
             "example1.py -h",
             textwrap.dedent(
                 """
-                usage: example1.py [-h] [-v] [-q]
+                usage: example1.py [-h] [-v] [-q] [--colors] [--no-colors]
 
                 optional arguments:
                   -h, --help     show this help message and exit
                   -v, --verbose  Increase verbosity. Can be applied multiple times, like -vv
                   -q, --quiet    Decrease verbosity. Can be applied multiple times, like -qq
-                """
-            ),
-        )
-
-    def test_example1_long_help(self):
-        self.assert_output(
-            "example1.py -h",
-            textwrap.dedent(
-                """
-                usage: example1.py [-h] [-v] [-q]
-
-                optional arguments:
-                  -h, --help     show this help message and exit
-                  -v, --verbose  Increase verbosity. Can be applied multiple times, like -vv
-                  -q, --quiet    Decrease verbosity. Can be applied multiple times, like -qq
+                  --colors       Force set colored output
+                  --no-colors    Force set no-colored output
                 """
             ),
         )
@@ -111,7 +98,7 @@ class TestExamples(unittest.TestCase):
             "example1.py -vv",
             textwrap.dedent(
                 """
-                DEBUG Arguments: Namespace(quiet=None, verbose=2)
+                DEBUG Arguments: Namespace(colors=None, quiet=None, verbose=2)
                 CRITICAL critical message
                 ERROR error message
                 WARNING warning message
@@ -127,7 +114,7 @@ class TestExamples(unittest.TestCase):
             "example1.py -vvv",
             textwrap.dedent(
                 """
-                DEBUG Arguments: Namespace(quiet=None, verbose=3)
+                DEBUG Arguments: Namespace(colors=None, quiet=None, verbose=3)
                 CRITICAL critical message
                 ERROR error message
                 WARNING warning message
@@ -144,7 +131,7 @@ class TestExamples(unittest.TestCase):
             "example1.py --verbose --verbose --verbose",
             textwrap.dedent(
                 """
-                DEBUG Arguments: Namespace(quiet=None, verbose=3)
+                DEBUG Arguments: Namespace(colors=None, quiet=None, verbose=3)
                 CRITICAL critical message
                 ERROR error message
                 WARNING warning message
@@ -225,6 +212,35 @@ class TestExamples(unittest.TestCase):
                     'integer': 1234,
                     'item': Item(name='name', value=999)
                 }
+                """
+            ),
+            subprocess_check=False,
+        )
+
+
+    def test_example8(self):
+        self.assert_output(
+            "example8.py --no-colors",
+            textwrap.dedent(
+                """
+                INFO Testing --colors and --no-colors options
+                [True, 'string', 1234]
+                CRITICAL Uncaught Exception: Unhandled Exception
+                Traceback with variables (most recent call last):
+                builtins.Exception: Unhandled Exception
+                """
+            ),
+            subprocess_check=False,
+        )
+        self.assert_output(
+            "example8.py --colors",
+            textwrap.dedent(
+                """
+                \x1b[34mINFO\x1b[0m Testing --colors and --no-colors options
+                \x1b[0m\x1b[37m[\x1b[0m\x1b[0m\x1b[36mTrue\x1b[0m\x1b[0m\x1b[37m,\x1b[0m \x1b[0m\x1b[33m'\x1b[0m\x1b[33mstring\x1b[0m\x1b[33m'\x1b[0m\x1b[0m\x1b[37m,\x1b[0m \x1b[0m\x1b[37m1234\x1b[0m\x1b[0m\x1b[37m]\x1b[0m
+                \x1b[34mCRITICAL\x1b[0m \x1b[1;31mUncaught Exception: Unhandled Exception\x1b[0m
+                \x1b[36mTraceback with variables (most recent call last):\x1b[0m
+                \x1b[31mbuiltins.Exception:\x1b[0m\x1b[91m Unhandled Exception\x1b[0m
                 """
             ),
             subprocess_check=False,
