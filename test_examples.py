@@ -40,7 +40,7 @@ class TestExamples(unittest.TestCase):
                   -v, --verbose  Increase verbosity. Can be applied multiple times, like -vv
                   -q, --quiet    Decrease verbosity. Can be applied multiple times, like -qq
                   --colors       Force set colored output
-                  --no-colors    Force set no-colored output
+                  --no-colors    Force set non-colored output
                 """
             ),
         )
