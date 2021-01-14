@@ -11,8 +11,7 @@ import colorful
 import prettyprinter
 import tqdm
 import verboselogs
-from traceback_with_variables.color import choose_color_scheme, supports_ansi
-from traceback_with_variables.core import ColorScheme, ColorSchemes, iter_tb_lines
+from traceback_with_variables.core import ColorSchemes, Format, iter_exc_lines
 
 _with_colors = None
 
@@ -41,11 +40,10 @@ class CustomLogFormatter(coloredlogs.ColoredFormatter):
             color_scheme = ColorSchemes.none
 
         return "\n".join(
-            iter_tb_lines(
+            iter_exc_lines(
                 e=stack_info[1],
-                tb=stack_info[2],
                 num_skipped_frames=1,
-                color_scheme=color_scheme,
+                fmt=Format(color_scheme=color_scheme),
             )
         )
 
@@ -186,7 +184,7 @@ def bootstrap_args():
     args = parser.parse_args()
 
     if args.colors is None:
-        _with_colors = supports_ansi(sys.stdout)
+        _with_colors = sys.stdout.isatty()
     else:
         _with_colors = args.colors
         if args.colors:
