@@ -11,5 +11,5 @@ for i in scripthelper.progressbar(range(200)):
     if i % 5 == 0:
         logger.debug(f"Iteration {i}")
     logger.spam(f"Iteration {i}")
-    time.sleep(0.05)
+    time.sleep(0.00001)
 logger.info("Done")

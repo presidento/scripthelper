@@ -149,11 +149,27 @@ class TestExamples(unittest.TestCase):
     def test_example2_with_name_provided(self):
         self.assert_output("example2.py --name World", "INFO Hello World")
 
-    @unittest.skip(
-        "Example3 demonstrates the progressbar, it should be checked manually."
-    )
-    def test_example3(self):
-        pass
+    def test_example6(self):
+        self.assert_output(
+            "example3.py -v",
+            textwrap.dedent(
+                """
+                INFO Doing the calculations...
+                VERBOSE Iteration 0
+                VERBOSE Iteration 20
+                VERBOSE Iteration 40
+                VERBOSE Iteration 60
+                VERBOSE Iteration 80
+                VERBOSE Iteration 100
+                VERBOSE Iteration 120
+                VERBOSE Iteration 140
+                VERBOSE Iteration 160
+                VERBOSE Iteration 180
+                INFO Done
+                """
+            ),
+        )
+
 
     def test_example4(self):
         self.assert_output("example4.py", "INFO Hello from a module.")
