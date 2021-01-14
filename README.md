@@ -37,6 +37,17 @@ else:
     logger.warning('Name was not provided')
 ```
 
+Or:
+
+```python
+import scripthelper
+
+scripthelper.add_argument('-n', '--name', help='Name to greet')
+logger = scripthelper.bootstrap()
+
+name = scripthelper.args.name
+```
+
 ## Progressbar works with logging, too
 
 ```python

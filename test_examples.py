@@ -149,6 +149,9 @@ class TestExamples(unittest.TestCase):
     def test_example2_with_name_provided(self):
         self.assert_output("example2.py --name World", "INFO Hello World")
 
+    def test_example2b_with_name_provided(self):
+        self.assert_output("example2b.py --name Nation", "INFO Hello Nation")
+
     def test_example6(self):
         self.assert_output(
             "example3.py -v",

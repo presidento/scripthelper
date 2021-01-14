@@ -117,6 +117,7 @@ def getLogger(name="__main__"):
 
 get_logger = getLogger
 
+args = None  # Will be set during bootstrap
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -179,6 +180,7 @@ pp = pprint
 
 
 def bootstrap_args():
+    global args
     global _with_colors
 
     args = parser.parse_args()
