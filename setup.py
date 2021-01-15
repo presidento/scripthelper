@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="scripthelper",
-    version="1.9",
+    version="21.1.1",
     scripts=[],
     author="Máté Farkas",
     author_email="fm@farkas-mate.hu",

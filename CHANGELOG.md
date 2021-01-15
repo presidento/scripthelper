@@ -1,3 +1,10 @@
+## 21.1.1
+
+- Make `scripthelper.args` public.
+- Upgrade `traceback_with_variables` dependency
+- Small bugfixes
+- New version format: "{YEAR}-{MONTH}-{PATCH}"
+
 ## 1.9 / 2020-12-12
 
 - Add colored pretty printer support
