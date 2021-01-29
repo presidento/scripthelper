@@ -1,22 +1,12 @@
 # scripthelper
 
-Helper module for simple command line Python scripts
+Helper module for simple command line Python scripts.
+
+The documentation with inline examples can be found in [pypi](https://pypi.org/project/scripthelper/).
 
 ## Basic usage
 
-```python
-import scripthelper
-
-logger = scripthelper.bootstrap()
-
-logger.critical('critical message')
-logger.error('error message')
-logger.warning('warning message')
-logger.info('info message')
-logger.verbose('verbose message')
-logger.debug('debug message')
-logger.spam('spam message')
-```
+See [example1.py](example1.py)
 
 It just works. Try `--verbose` and `--quiet`  command line options, too.
 It uses colored log messages on a terminal.
@@ -24,85 +14,32 @@ See `--help` for more information.
 
 ## Adding other command line parameters
 
-```python
-import scripthelper
-
-scripthelper.add_argument('-n', '--name', help='Name to greet')
-logger, args = scripthelper.bootstrap_args()
-
-if args.name:
-    logger.debug('Name was provided')
-    logger.info(f'Hello {args.name}')
-else:
-    logger.warning('Name was not provided')
-```
+See [example2.py](example2.py)
 
 Or:
 
-```python
-import scripthelper
-
-scripthelper.add_argument('-n', '--name', help='Name to greet')
-logger = scripthelper.bootstrap()
-
-name = scripthelper.args.name
-```
+See [example2b.py](example2b.py)
 
 ## Progressbar works with logging, too
 
-```python
-import scripthelper
-import time
+See [example3.py](example3.py)
 
-logger = scripthelper.bootstrap()
+## Extended log levels can be used in modules
 
-logger.info('Doing the calculations...')
-for i in scripthelper.progressbar(range(200)):
-    if i % 20 == 0:
-        logger.verbose(f'Iteration {i}')
-    if i % 5 == 0:
-        logger.debug(f'Iteration {i}')
-    logger.spam(f'Iteration {i}')
-    time.sleep(0.05)
-logger.info('Done')
-```
+See [example4.py](example4.py)
+
+See [example4module.py](example4module.py)
 
 ## You can easily preserve logs in files
 
-```python
-import scripthelper
-
-logger = scripthelper.bootstrap()
-scripthelper.setup_file_logging()
-
-logger.warning('warning message')
-logger.info('info message')
-logger.debug('debug message')
-```
+See [example5.py](example5.py)
 
 ## It handles exceptions, warnings
 
-```python
-import scripthelper
-import warnings
-
-scripthelper.bootstrap()
-
-warnings.warn("This user warning will be captured.")
-raise RuntimeError("This exception should be handled.")
-```
+See [example6.py](example6.py)
 
 (The local variables will be displayed in stack trace.)
 
 ## Has built-in colored pretty printer
 
-```python
-import scripthelper
-
-something = {
-    "bool": True,
-    "none": None,
-    "integer": 1234,
-}
-scripthelper.pp(something)
-```
+See [example7.py](example7.py)

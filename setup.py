@@ -1,7 +1,19 @@
 import setuptools
+import pathlib
+import re
 
 with open("README.md", "r") as fh:
-    long_description = fh.read()
+    long_description = ""
+    for line in fh:
+        match = re.match(r"See \[(.*)\]\(\1\)", line)
+        if match:
+            filename = match.group(1)
+            long_description += f"{filename}:\n"
+            long_description += "```python\n"
+            long_description += pathlib.Path(filename).read_text()
+            long_description += "```\n"
+        else:
+            long_description += line
 
 setuptools.setup(
     name="scripthelper",
