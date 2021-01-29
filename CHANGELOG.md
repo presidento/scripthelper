@@ -1,3 +1,10 @@
+## 21.2.1
+
+- Add `warn` (`warnings.warn`)
+- Add loglevel constants
+- Make compatible with Python 3.7, 3.8, 3.9.
+- Add docstrings
+
 ## 21.1.1
 
 - Make `scripthelper.args` public.
