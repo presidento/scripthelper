@@ -18,6 +18,16 @@ _with_colors = None
 logger = logging.getLogger(__name__)
 
 
+CRITICAL = logging.CRITICAL
+ERROR = logging.ERROR
+WARNING = logging.WARNING
+INFO = logging.INFO
+VERBOSE = verboselogs.VERBOSE
+DEBUG = logging.DEBUG
+SPAM = verboselogs.SPAM
+warn = warnings.warn
+
+
 class CustomLogFormatter(coloredlogs.ColoredFormatter):
     def __init__(self, format_str, *, colors):
         self.colors = colors
