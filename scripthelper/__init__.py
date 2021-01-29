@@ -1,3 +1,10 @@
+"""Framework for small scripts in Python 3
+
+You'll get the whole environment by importing just
+one file, and you can start working immediately.
+
+The output will be colored with support of multiple
+log levels, easy-to-add command line arguments, etc."""
 import argparse
 import inspect
 import logging
@@ -17,6 +24,28 @@ _with_colors = None
 
 logger = logging.getLogger(__name__)
 
+__all__ = [
+    # Logging
+    "getLogger",
+    "CRITICAL",
+    "ERROR",
+    "WARNING",
+    "INFO",
+    "VERBOSE",
+    "DEBUG",
+    "SPAM",
+    # Argument parsing and bootstrap
+    "bootstrap",
+    "bootstrap_args",
+    "add_arguments",
+    "args",
+    # Progressbar
+    "progressbar",
+    # For debugging
+    "pprint",
+    "pp",
+    "warn",
+]
 
 CRITICAL = logging.CRITICAL
 ERROR = logging.ERROR
@@ -120,10 +149,22 @@ def _log_level_from_verbosity(console_verbosity):
 
 
 def getLogger(name="__main__"):
+    """Return a verbose logger for a module
+
+    It is an alias for verboselogs.VerboseLogger.
+    Can be used as the logging.getLogger() method.
+    Extends built-in logger with levels: verbose, spam
+    """
     return verboselogs.VerboseLogger(name)
 
 
-get_logger = getLogger
+def get_logger(name="__main__"):
+    warnings.warn(
+        "get_logger is deprecated in favor of getLogger. Will be removed in 2022.",
+        category=DeprecationWarning,
+    )
+    return getLogger(name)
+
 
 args = None  # Will be set during bootstrap
 
@@ -155,10 +196,15 @@ parser.add_argument(
 
 
 def add_argument(*args, **kw):
+    """See: ArgumentParser.add_argument()"""
     parser.add_argument(*args, **kw)
 
 
 def setup_file_logging(*, level="INFO", filename=None):
+    """Setups logging to file
+
+    The default filename is the name of the main script.
+    It uses RotatingFileHandler."""
     if filename is None:
         caller_module = inspect.getmodule(inspect.stack()[1][0])
         filename = pathlib.Path(caller_module.__file__).with_suffix(".log")
@@ -178,6 +224,7 @@ progressbar = tqdm.tqdm
 
 
 def pprint(*args, **kwargs):
+    """PrettyPrint with or without colors"""
     if _with_colors:
         prettyprinter.cpprint(*args, **kwargs)
     else:
@@ -188,6 +235,11 @@ pp = pprint
 
 
 def bootstrap_args():
+    """Bootstraps the framework
+
+    returns (logger, args)
+        The logger for main scripts
+        And the parsed argument"""
     global args
     global _with_colors
 
@@ -210,5 +262,8 @@ def bootstrap_args():
     return getLogger(), args
 
 
-def bootstrap(log_file=None):
+def bootstrap():
+    """Bootstraps the framework
+
+    returns logger - the logger for the main script"""
     return bootstrap_args()[0]
