@@ -27,7 +27,7 @@ setuptools.setup(
     url="https://github.com/presidento/scripthelper",
     packages=["scripthelper"],
     classifiers=[
-        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
