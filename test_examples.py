@@ -2,17 +2,21 @@ import unittest
 import subprocess
 import pathlib
 import textwrap
+import os
+import sys
 
 
 class TestExamples(unittest.TestCase):
     def assert_output(self, command, expected, subprocess_check=True):
         result = subprocess.run(
-            f"python {command}",
+            f"\"{sys.executable}\" {command}",
             stdout=subprocess.PIPE,
             check=subprocess_check,
             shell=True,
         )
         output = result.stdout.decode().replace("\r", "")
+        abs_path_dir = str(pathlib.Path(".").absolute()) + os.sep
+        output = output.replace(abs_path_dir, "")
         self.assertEqual(output.strip(), expected.strip())
 
     def test_example1_without_arguments(self):
@@ -94,54 +98,59 @@ class TestExamples(unittest.TestCase):
         )
 
     def test_example1_with_2_verbose(self):
-        self.assert_output(
-            "example1.py -vv",
-            textwrap.dedent(
-                """
-                DEBUG Arguments: Namespace(colors=None, quiet=None, verbose=2)
-                CRITICAL critical message
-                ERROR error message
-                WARNING warning message
-                INFO info message
-                VERBOSE verbose message
-                DEBUG debug message
-                """
-            ),
+        expected = textwrap.dedent(
+            """
+            DEBUG Arguments: Namespace(colors=None, quiet=None, verbose=2)
+            CRITICAL critical message
+            ERROR error message
+            WARNING warning message
+            INFO info message
+            VERBOSE verbose message
+            DEBUG debug message
+            """
+        ).strip()
+        expected = self.change_namespace_for_python39(
+            expected, "DEBUG Arguments: Namespace(verbose=2, quiet=None, colors=None)"
         )
+
+        self.assert_output("example1.py -vv", expected)
 
     def test_example1_with_3_verbose(self):
-        self.assert_output(
-            "example1.py -vvv",
-            textwrap.dedent(
-                """
-                DEBUG Arguments: Namespace(colors=None, quiet=None, verbose=3)
-                CRITICAL critical message
-                ERROR error message
-                WARNING warning message
-                INFO info message
-                VERBOSE verbose message
-                DEBUG debug message
-                SPAM spam message
-                """
-            ),
+        expected = textwrap.dedent(
+            """
+            DEBUG Arguments: Namespace(colors=None, quiet=None, verbose=3)
+            CRITICAL critical message
+            ERROR error message
+            WARNING warning message
+            INFO info message
+            VERBOSE verbose message
+            DEBUG debug message
+            SPAM spam message
+            """
+        ).strip()
+        expected = self.change_namespace_for_python39(
+            expected, "DEBUG Arguments: Namespace(verbose=3, quiet=None, colors=None)"
         )
 
+        self.assert_output("example1.py -vvv", expected)
+
     def test_example1_with_3_long_verbose(self):
-        self.assert_output(
-            "example1.py --verbose --verbose --verbose",
-            textwrap.dedent(
-                """
-                DEBUG Arguments: Namespace(colors=None, quiet=None, verbose=3)
-                CRITICAL critical message
-                ERROR error message
-                WARNING warning message
-                INFO info message
-                VERBOSE verbose message
-                DEBUG debug message
-                SPAM spam message
-                """
-            ),
+        expected = textwrap.dedent(
+            """
+            DEBUG Arguments: Namespace(colors=None, quiet=None, verbose=3)
+            CRITICAL critical message
+            ERROR error message
+            WARNING warning message
+            INFO info message
+            VERBOSE verbose message
+            DEBUG debug message
+            SPAM spam message
+            """
+        ).strip()
+        expected = self.change_namespace_for_python39(
+            expected, "DEBUG Arguments: Namespace(verbose=3, quiet=None, colors=None)"
         )
+        self.assert_output("example1.py --verbose --verbose --verbose", expected)
 
     def test_example2_without_arguments(self):
         self.assert_output("example2.py", "WARNING Name was not provided")
@@ -173,18 +182,19 @@ class TestExamples(unittest.TestCase):
             ),
         )
 
-
     def test_example4(self):
         self.assert_output("example4.py", "INFO Hello from a module.")
 
     def test_example5(self):
         log_file = pathlib.Path("example5.log")
-        log_file.unlink(missing_ok=True)
+        if log_file.is_file():
+            log_file.unlink()
         try:
             subprocess.run(f"python example5.py >NUL", shell=True)
             log_content = log_file.read_text().strip()
         finally:
-            log_file.unlink(missing_ok=True)
+            if log_file.is_file():
+                log_file.unlink()
         dates_removed = "\n".join([line[20:] for line in log_content.splitlines()])
         self.assertEqual(
             dates_removed,
@@ -218,7 +228,6 @@ class TestExamples(unittest.TestCase):
             subprocess_check=False,
         )
 
-
     def test_example7(self):
         self.assert_output(
             "example7.py",
@@ -235,7 +244,6 @@ class TestExamples(unittest.TestCase):
             ),
             subprocess_check=False,
         )
-
 
     def test_example8(self):
         self.assert_output(
@@ -264,6 +272,14 @@ class TestExamples(unittest.TestCase):
             ),
             subprocess_check=False,
         )
+
+    @staticmethod
+    def change_namespace_for_python39(original, replacement):
+        if sys.version_info.minor < 9:
+            return original
+        lines = original.splitlines()
+        lines[0] = replacement
+        return "\n".join(lines)
 
 
 if __name__ == "__main__":

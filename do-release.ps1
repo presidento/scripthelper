@@ -17,16 +17,13 @@ Write-Step "Delete build folders"
 Remove-Item -Recurse -Force -ErrorAction Ignore build
 Remove-Item -Recurse -Force -ErrorAction Ignore dist
 
-Write-Step "Activate Python environment"
-.venv\Scripts\activate.ps1
+Write-Step "Bootstrap Python environments and activate one"
+.\bootstrap.ps1
+Invoke-Command { .\test-all.ps1 }
 
-Write-Step "Install dependencies, the script itself and run tests"
+Write-Step "Install build dependencies and build the release"
 Invoke-Command { python -m pip install --upgrade setuptools wheel pip twine }
-Invoke-Command { python -m pip install --upgrade . }
-Invoke-Command { python test_examples.py }
-
-Write-Step "Build the release"
 Invoke-Command { python setup.py sdist bdist_wheel }
 
-Write-Step "Uploading release to pypi"
+Write-Step "Upload release to pypi"
 Invoke-Command { python -m twine upload dist/* }
