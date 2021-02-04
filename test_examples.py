@@ -161,7 +161,7 @@ class TestExamples(unittest.TestCase):
     def test_example2b_with_name_provided(self):
         self.assert_output("example2b.py --name Nation", "INFO Hello Nation")
 
-    def test_example6(self):
+    def test_example3(self):
         self.assert_output(
             "example3.py -v",
             textwrap.dedent(

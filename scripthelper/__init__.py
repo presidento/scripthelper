@@ -14,7 +14,7 @@ import sys
 import warnings
 
 import coloredlogs
-import colorful
+from colorful import colorful  # type: ignore
 import prettyprinter
 import tqdm
 import verboselogs
@@ -133,9 +133,9 @@ def _log_level_from_verbosity(console_verbosity):
         logging.ERROR,
         logging.WARNING,
         logging.INFO,
-        logging.VERBOSE,
+        verboselogs.VERBOSE,
         logging.DEBUG,
-        logging.SPAM,
+        verboselogs.SPAM,
     ]
     default_level = logging.INFO
 
@@ -251,7 +251,7 @@ def bootstrap_args():
         _with_colors = args.colors
         if args.colors:
             # Hack for pretty printer on force colors
-            colorful.colorful.use_16_ansi_colors()
+            colorful.use_16_ansi_colors()
 
     console_verbosity = (args.verbose or 0) - (args.quiet or 0)
     console_log_level = _log_level_from_verbosity(console_verbosity)
