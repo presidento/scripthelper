@@ -10,5 +10,6 @@ Function Initialize-Python {
 Initialize-Python 3.7
 Initialize-Python 3.8
 Initialize-Python 3.9
+Initialize-Python "3.10"
 
 .\.3.7.venv\Scripts\activate.ps1

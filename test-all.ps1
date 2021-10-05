@@ -8,3 +8,4 @@ Function Invoke-Tests {
 Invoke-Tests 3.7
 Invoke-Tests 3.8
 Invoke-Tests 3.9
+Invoke-Tests "3.10"

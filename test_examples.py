@@ -8,6 +8,11 @@ import sys
 
 class TestExamples(unittest.TestCase):
     def assert_output(self, command, expected, subprocess_check=True):
+        output = self.run_command(command, subprocess_check)
+        self.assertEqual(output.strip(), expected.strip())
+    
+    @staticmethod
+    def run_command(command, subprocess_check=True):
         result = subprocess.run(
             f"\"{sys.executable}\" {command}",
             stdout=subprocess.PIPE,
@@ -17,7 +22,7 @@ class TestExamples(unittest.TestCase):
         output = result.stdout.decode().replace("\r", "")
         abs_path_dir = str(pathlib.Path(".").absolute()) + os.sep
         output = output.replace(abs_path_dir, "")
-        self.assertEqual(output.strip(), expected.strip())
+        return output
 
     def test_example1_without_arguments(self):
         self.assert_output(
@@ -33,21 +38,18 @@ class TestExamples(unittest.TestCase):
         )
 
     def test_example1_help(self):
-        self.assert_output(
-            "example1.py -h",
-            textwrap.dedent(
-                """
-                usage: example1.py [-h] [-v] [-q] [--colors] [--no-colors]
-
-                optional arguments:
-                  -h, --help     show this help message and exit
-                  -v, --verbose  Increase verbosity. Can be applied multiple times, like -vv
-                  -q, --quiet    Decrease verbosity. Can be applied multiple times, like -qq
-                  --colors       Force set colored output
-                  --no-colors    Force set non-colored output
-                """
-            ),
-        )
+        output = self.run_command("example1.py -h")
+        usage = "usage: example1.py [-h] [-v] [-q] [--colors] [--no-colors]"
+        assert usage in output
+        args_help = textwrap.dedent("""
+            -h, --help     show this help message and exit
+            -v, --verbose  Increase verbosity. Can be applied multiple times, like -vv
+            -q, --quiet    Decrease verbosity. Can be applied multiple times, like -qq
+            --colors       Force set colored output
+            --no-colors    Force set non-colored output
+            """)
+        for arg_help in args_help.splitlines():
+            assert arg_help in output, "Missing line: " + arg_help
 
     def test_example1_with_1_quiet(self):
         self.assert_output(
