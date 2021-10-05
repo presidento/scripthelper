@@ -4,7 +4,7 @@ Function Initialize-Python {
     Write-Host "*** Setting up Python "$version" environment ***" -ForegroundColor yellow
     If (-not (Test-Path $venvName)) { py -$version -m venv $venvName }
     & "$venvName\Scripts\python.exe" -m pip install pip wheel --quiet --upgrade
-    & "$venvName\Scripts\python.exe" -m pip install . --upgrade
+    & "$venvName\Scripts\python.exe" -m pip install . --upgrade --use-feature=in-tree-build
 }
 
 Initialize-Python 3.7
