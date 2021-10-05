@@ -174,11 +174,6 @@ class TestExamples(unittest.TestCase):
                 VERBOSE Iteration 40
                 VERBOSE Iteration 60
                 VERBOSE Iteration 80
-                VERBOSE Iteration 100
-                VERBOSE Iteration 120
-                VERBOSE Iteration 140
-                VERBOSE Iteration 160
-                VERBOSE Iteration 180
                 INFO Done
                 """
             ),
@@ -215,12 +210,12 @@ class TestExamples(unittest.TestCase):
             "example6.py",
             textwrap.dedent(
                 """
-                WARNING example6.py:14: UserWarning: This user warning will be captured.
-                  warnings.warn("This user warning will be captured.")
-
+                WARNING example6.py:13: UserWarning: This user warning will be captured.
+                  scripthelper.warn("This user warning will be captured.")
+                
                 CRITICAL Uncaught RuntimeError: This exception should be handled.
                 Traceback with variables (most recent call last):
-                  File "example6.py", line 11, in uncaught_exception_test
+                  File "example6.py", line 10, in uncaught_exception_test
                     raise RuntimeError("This exception should be handled.")
                       this_variable = 'will be displayed in stack trace'
                       as_well_as = 'the other variables'
