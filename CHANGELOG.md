@@ -1,3 +1,7 @@
+## 21.10.1
+
+- Make Python 3.10 compatible
+
 ## 21.2.1
 
 - Add `warn` (`warnings.warn`)
