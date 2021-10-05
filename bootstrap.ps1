@@ -3,7 +3,7 @@ Function Initialize-Python {
     $venvName = "." + $version + ".venv"
     Write-Host "*** Setting up Python "$version" environment ***" -ForegroundColor yellow
     If (-not (Test-Path $venvName)) { py -$version -m venv $venvName }
-    & "$venvName\Scripts\python.exe" -m pip install pip --quiet --upgrade
+    & "$venvName\Scripts\python.exe" -m pip install pip wheel --quiet --upgrade
     & "$venvName\Scripts\python.exe" -m pip install . --upgrade
 }
 
