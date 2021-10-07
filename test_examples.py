@@ -205,6 +205,8 @@ class TestExamples(unittest.TestCase):
             ).strip(),
         )
 
+    @unittest.skipIf(sys.version_info < (3, 7),
+        "The output slighly differs on older Python.")
     def test_example6(self):
         self.assert_output(
             "example6.py",
@@ -225,6 +227,8 @@ class TestExamples(unittest.TestCase):
             subprocess_check=False,
         )
 
+    @unittest.skipIf(sys.version_info < (3, 7),
+        "Dataclasses are not supported in older Python")
     def test_example7(self):
         self.assert_output(
             "example7.py",

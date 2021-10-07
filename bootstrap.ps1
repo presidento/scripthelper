@@ -7,6 +7,7 @@ Function Initialize-Python {
     & "$venvName\Scripts\python.exe" -m pip install . --upgrade --use-feature=in-tree-build
 }
 
+Initialize-Python 3.6
 Initialize-Python 3.7
 Initialize-Python 3.8
 Initialize-Python 3.9

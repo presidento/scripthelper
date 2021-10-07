@@ -5,6 +5,7 @@ Function Invoke-Tests {
     & "$venvName\Scripts\python.exe" .\test_examples.py
 }
 
+Invoke-Tests 3.6
 Invoke-Tests 3.7
 Invoke-Tests 3.8
 Invoke-Tests 3.9
