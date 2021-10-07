@@ -1,7 +1,7 @@
 Function Invoke-Tests {
     $version = $args[0]
-    $venvName = "." + $version + ".venv"
-    Write-Host "*** Testing with Python "$version" ***" -ForegroundColor yellow
+    $venvName = ".$version.venv"
+    Write-Host "*** Testing with Python $version ***" -ForegroundColor yellow
     & "$venvName\Scripts\python.exe" .\test_examples.py
 }
 
