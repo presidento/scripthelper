@@ -1,3 +1,7 @@
+## 21.10.2
+
+- Mark Python 3.6 compatible
+
 ## 21.10.1
 
 - Make Python 3.10 compatible
