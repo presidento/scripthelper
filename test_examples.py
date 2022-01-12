@@ -187,7 +187,7 @@ class TestExamples(unittest.TestCase):
         if log_file.is_file():
             log_file.unlink()
         try:
-            subprocess.run(f"python example5.py >NUL", shell=True)
+            subprocess.run(f"\"{sys.executable}\" example5.py >NUL", shell=True)
             log_content = log_file.read_text().strip()
         finally:
             if log_file.is_file():
