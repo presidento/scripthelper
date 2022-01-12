@@ -11,7 +11,7 @@ bootstrap:
 bootstrap-with VERSION:
     If (-not (Test-Path .{{ VERSION }}.venv)) { py -{{ VERSION }} -m venv .{{ VERSION }}.venv }
     & ".{{ VERSION }}.venv\Scripts\python.exe" -m pip install pip wheel --quiet --upgrade
-    & ".{{ VERSION }}.venv\Scripts\python.exe" -m pip install . --upgrade --use-feature=in-tree-build
+    & ".{{ VERSION }}.venv\Scripts\python.exe" -m pip install . --upgrade
 
 # Test with all supported Python versions
 test:
