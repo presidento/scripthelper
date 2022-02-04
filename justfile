@@ -1,7 +1,7 @@
 DEFAULT_VERSION := "3.7"
 SUPPORTED_VERSIONS := "3.6 3.7 3.8 3.9 3.10"
 
-set shell := ["pwsh", "-c"]
+set shell := ["powershell", "-nop", "-c"]
 
 # Bootstrap with all supported Python versions
 bootstrap:
