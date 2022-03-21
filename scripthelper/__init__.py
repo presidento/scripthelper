@@ -12,12 +12,13 @@ import logging.handlers
 import pathlib
 import sys
 import warnings
+from typing import Tuple
 
 import coloredlogs
-from colorful import colorful  # type: ignore
 import prettyprinter
 import tqdm
 import verboselogs
+from colorful import colorful  # type: ignore
 from traceback_with_variables.core import ColorSchemes, Format, iter_exc_lines
 
 _with_colors = None
@@ -34,17 +35,20 @@ __all__ = [
     "VERBOSE",
     "DEBUG",
     "SPAM",
+    # Warning
+    "warn",
     # Argument parsing and bootstrap
     "bootstrap",
     "bootstrap_args",
     "add_arguments",
+    "setup_file_logging",
     "args",
+    "parser",
     # Progressbar
     "progressbar",
     # For debugging
     "pprint",
     "pp",
-    "warn",
 ]
 
 CRITICAL = logging.CRITICAL
@@ -148,7 +152,7 @@ def _log_level_from_verbosity(console_verbosity):
 ########################################################################################v
 
 
-def getLogger(name="__main__"):
+def getLogger(name: str = "__main__") -> verboselogs.VerboseLogger:
     """Return a verbose logger for a module
 
     It is an alias for verboselogs.VerboseLogger.
@@ -158,7 +162,7 @@ def getLogger(name="__main__"):
     return verboselogs.VerboseLogger(name)
 
 
-def get_logger(name="__main__"):
+def get_logger(name: str = "__main__") -> verboselogs.VerboseLogger:
     warnings.warn(
         "get_logger is deprecated in favor of getLogger. Will be removed in 2022.",
         category=DeprecationWarning,
@@ -166,7 +170,7 @@ def get_logger(name="__main__"):
     return getLogger(name)
 
 
-args = None  # Will be set during bootstrap
+args: argparse.Namespace  # Parsed arguments, will be set during bootstrap
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -195,19 +199,20 @@ parser.add_argument(
 )
 
 
-def add_argument(*args, **kw):
+def add_argument(*args, **kw) -> None:
     """See: ArgumentParser.add_argument()"""
     parser.add_argument(*args, **kw)
 
 
-def setup_file_logging(*, level="INFO", filename=None):
+def setup_file_logging(*, level: str = "INFO", filename: str = None) -> None:
     """Setups logging to file
 
     The default filename is the name of the main script.
     It uses RotatingFileHandler."""
     if filename is None:
         caller_module = inspect.getmodule(inspect.stack()[1][0])
-        filename = pathlib.Path(caller_module.__file__).with_suffix(".log")
+        module_file: str = caller_module.__file__  # type:ignore
+        filename = pathlib.Path(module_file).with_suffix(".log").as_posix()
 
     file_log_handler = logging.handlers.RotatingFileHandler(
         filename, encoding="utf-8", maxBytes=10 * 1024 * 1024, backupCount=9
@@ -223,7 +228,7 @@ def setup_file_logging(*, level="INFO", filename=None):
 progressbar = tqdm.tqdm
 
 
-def pprint(*args, **kwargs):
+def pprint(*args, **kwargs) -> None:
     """PrettyPrint with or without colors"""
     if _with_colors:
         prettyprinter.cpprint(*args, **kwargs)
@@ -234,7 +239,7 @@ def pprint(*args, **kwargs):
 pp = pprint
 
 
-def bootstrap_args():
+def bootstrap_args() -> Tuple[verboselogs.VerboseLogger, argparse.Namespace]:
     """Bootstraps the framework
 
     returns (logger, args)
@@ -262,7 +267,7 @@ def bootstrap_args():
     return getLogger(), args
 
 
-def bootstrap():
+def bootstrap() -> verboselogs.VerboseLogger:
     """Bootstraps the framework
 
     returns logger - the logger for the main script"""

@@ -10,11 +10,15 @@ bootstrap:
 # Setting up Python environment with specified Python version
 bootstrap-with VERSION:
     If (-not (Test-Path .{{ VERSION }}.venv)) { py -{{ VERSION }} -m venv .{{ VERSION }}.venv }
-    & ".{{ VERSION }}.venv\Scripts\python.exe" -m pip install pip wheel --quiet --upgrade
+    & ".{{ VERSION }}.venv\Scripts\python.exe" -m pip install pip wheel mypy --quiet --upgrade
     & ".{{ VERSION }}.venv\Scripts\python.exe" -m pip install . --upgrade
 
+# Check static typing
+mypy: clean
+    & ".{{ DEFAULT_VERSION }}.venv\Scripts\mypy.exe" .
+
 # Test with all supported Python versions
-test:
+test: mypy
     @foreach ($version in ('{{ SUPPORTED_VERSIONS }}' -split '\s+')) { just test-with "$version" }
 
 # Run the tests with specified Python version

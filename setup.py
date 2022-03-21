@@ -26,6 +26,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/presidento/scripthelper",
     packages=["scripthelper"],
+    package_data={"scripthelper": ["py.typed"]},
     classifiers=[
         "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: 3.6",
