@@ -14,7 +14,8 @@ bootstrap-with VERSION:
     & ".{{ VERSION }}.venv\Scripts\python.exe" -m pip install . --upgrade
 
 # Check static typing
-mypy: clean
+mypy:
+    just clean
     & ".{{ DEFAULT_VERSION }}.venv\Scripts\mypy.exe" .
 
 # Test with all supported Python versions
