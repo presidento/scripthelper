@@ -1,6 +1,8 @@
-## 21.10.2
+## 21.09.1
 
-- Mark Python 3.6 compatible
+- Disable progressbar dynamically on non-tty stderr.
+- Mark Python 3.11 compatible.
+- Mark package typed.
 
 ## 21.10.1
 
