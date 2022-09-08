@@ -1,5 +1,5 @@
 DEFAULT_VERSION := "3.7"
-SUPPORTED_VERSIONS := "3.6 3.7 3.8 3.9 3.10"
+SUPPORTED_VERSIONS := "3.6 3.7 3.8 3.9 3.10 3.11"
 
 set shell := ["powershell", "-nop", "-c"]
 

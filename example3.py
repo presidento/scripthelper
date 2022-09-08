@@ -12,5 +12,5 @@ for i in scripthelper.progressbar(range(100)):
         logger.debug(f"Iteration {i}")
     if logger.isEnabledFor(scripthelper.SPAM):
         logger.spam(f"Iteration {i}")
-    time.sleep(0.00001)
+    time.sleep(0.01)
 logger.info("Done")
