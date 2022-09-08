@@ -11,14 +11,17 @@ class TestExamples(unittest.TestCase):
         output = self.run_command(command, subprocess_check)
         self.assertEqual(output.strip(), expected.strip())
     
-    @staticmethod
-    def run_command(command, subprocess_check=True):
+    def run_command(self, command, subprocess_check=True):
         result = subprocess.run(
             f"\"{sys.executable}\" {command}",
+            stderr=subprocess.PIPE,
             stdout=subprocess.PIPE,
             check=subprocess_check,
             shell=True,
         )
+        # There should be nothing on non-tty stderr.
+        # (The progressbar is on stderr, but only for tty stderr)
+        self.assertFalse(result.stderr.decode())
         output = result.stdout.decode().replace("\r", "")
         abs_path_dir = str(pathlib.Path(".").absolute()) + os.sep
         output = output.replace(abs_path_dir, "")

@@ -225,7 +225,15 @@ def setup_file_logging(*, level: str = "INFO", filename: str = None) -> None:
     logging.getLogger().addHandler(file_log_handler)
 
 
-progressbar = tqdm.tqdm
+def progressbar(*args, disable=None, **kwargs):
+    """See tqdm.tqdm
+    
+    The default value for 'disable' is None, meaning
+        - enable progressbar on terminals
+        - disable progressbar on non-tty
+    (checking the type of stderr)"""
+    kwargs["disable"] = disable
+    return tqdm.tqdm(*args, **kwargs)
 
 
 def pprint(*args, **kwargs) -> None:
