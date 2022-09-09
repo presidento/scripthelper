@@ -24,6 +24,8 @@ See [example2b.py](example2b.py)
 
 See [example3.py](example3.py)
 
+It is automatically disabled on non-tty `stderr` by default.
+
 ## Extended log levels can be used in modules
 
 See [example4.py](example4.py)
@@ -38,7 +40,20 @@ See [example5.py](example5.py)
 
 See [example6.py](example6.py)
 
-(The local variables will be displayed in stack trace.)
+The local variables will be displayed in stack trace, for example:
+
+```
+WARNING C:\***\scripthelper\example6.py:13: UserWarning: This user warning will be captured.
+  scripthelper.warn("This user warning will be captured.")
+
+CRITICAL Uncaught RuntimeError: This exception should be handled.
+Traceback with variables (most recent call last):
+  File "C:\***\scripthelper\example6.py", line 10, in uncaught_exception_test
+    raise RuntimeError("This exception should be handled.")
+      this_variable = 'will be displayed in stack trace'
+      as_well_as = 'the other variables'
+builtins.RuntimeError: This exception should be handled.
+```
 
 ## Has built-in colored pretty printer
 
