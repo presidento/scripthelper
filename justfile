@@ -7,7 +7,7 @@ set shell := ["powershell", "-nop", "-c"]
 bootstrap:
     @foreach ($version in ('{{ SUPPORTED_VERSIONS }}' -split '\s+')) { just bootstrap-with "$version" }
 
-# Setting up Python environment with specified Python version
+# Set up Python environment with specified Python version
 bootstrap-with VERSION:
     If (-not (Test-Path .{{ VERSION }}.venv)) { py -{{ VERSION }} -m venv .{{ VERSION }}.venv }
     & ".{{ VERSION }}.venv\Scripts\python.exe" -m pip install pip mypy setuptools wheel twine --quiet --upgrade
@@ -26,13 +26,15 @@ test: mypy
 test-with VERSION:
     & ".{{ VERSION }}.venv\Scripts\python.exe" .\test_examples.py
 
+# Remove compiled assets
 clean:
     -Remove-Item -Recurse -Force -ErrorAction Ignore build
     -Remove-Item -Recurse -Force -ErrorAction Ignore dist
 
+# Build the whole project, create a release
 build: clean bootstrap test
     & ".{{ DEFAULT_VERSION }}.venv\Scripts\python.exe" setup.py sdist bdist_wheel
 
+# Upload the release to PyPi
 upload:
     & ".{{ DEFAULT_VERSION }}.venv\Scripts\python.exe" -m twine upload dist/*
-
