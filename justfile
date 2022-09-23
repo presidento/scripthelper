@@ -10,8 +10,8 @@ bootstrap:
 # Setting up Python environment with specified Python version
 bootstrap-with VERSION:
     If (-not (Test-Path .{{ VERSION }}.venv)) { py -{{ VERSION }} -m venv .{{ VERSION }}.venv }
-    & ".{{ VERSION }}.venv\Scripts\python.exe" -m pip install pip wheel mypy --quiet --upgrade
-    & ".{{ VERSION }}.venv\Scripts\python.exe" -m pip install . --upgrade
+    & ".{{ VERSION }}.venv\Scripts\python.exe" -m pip install pip mypy setuptools wheel twine --quiet --upgrade
+    & ".{{ VERSION }}.venv\Scripts\python.exe" -m pip install . --upgrade --upgrade-strategy eager
 
 # Check static typing
 mypy:
@@ -31,7 +31,6 @@ clean:
     -Remove-Item -Recurse -Force -ErrorAction Ignore dist
 
 build: clean bootstrap test
-    & ".{{ DEFAULT_VERSION }}.venv\Scripts\python.exe" -m pip install --upgrade setuptools wheel pip twine
     & ".{{ DEFAULT_VERSION }}.venv\Scripts\python.exe" setup.py sdist bdist_wheel
 
 upload:
