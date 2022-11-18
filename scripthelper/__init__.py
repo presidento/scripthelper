@@ -12,7 +12,7 @@ import logging.handlers
 import pathlib
 import sys
 import warnings
-from typing import Tuple
+from typing import Optional, Tuple
 
 import coloredlogs
 import prettyprinter
@@ -204,7 +204,7 @@ def add_argument(*args, **kw) -> None:
     parser.add_argument(*args, **kw)
 
 
-def setup_file_logging(*, level: str = "INFO", filename: str = None) -> None:
+def setup_file_logging(*, level: str = "INFO", filename: Optional[str] = None) -> None:
     """Setups logging to file
 
     The default filename is the name of the main script.
