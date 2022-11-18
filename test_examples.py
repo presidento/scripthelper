@@ -105,7 +105,7 @@ class TestExamples(unittest.TestCase):
     def test_example1_with_2_verbose(self):
         expected = textwrap.dedent(
             """
-            DEBUG Arguments: Namespace(colors=None, quiet=None, verbose=2)
+            DEBUG Arguments: Namespace(verbose=2, quiet=None, colors=None)
             CRITICAL critical message
             ERROR error message
             WARNING warning message
@@ -114,8 +114,8 @@ class TestExamples(unittest.TestCase):
             DEBUG debug message
             """
         ).strip()
-        expected = self.change_namespace_for_python39(
-            expected, "DEBUG Arguments: Namespace(verbose=2, quiet=None, colors=None)"
+        expected = self.change_namespace_for_python_lte_38(
+            expected, "DEBUG Arguments: Namespace(colors=None, quiet=None, verbose=2)"
         )
 
         self.assert_output("example1.py -vv", expected)
@@ -123,7 +123,7 @@ class TestExamples(unittest.TestCase):
     def test_example1_with_3_verbose(self):
         expected = textwrap.dedent(
             """
-            DEBUG Arguments: Namespace(colors=None, quiet=None, verbose=3)
+            DEBUG Arguments: Namespace(verbose=3, quiet=None, colors=None)
             CRITICAL critical message
             ERROR error message
             WARNING warning message
@@ -133,8 +133,8 @@ class TestExamples(unittest.TestCase):
             SPAM spam message
             """
         ).strip()
-        expected = self.change_namespace_for_python39(
-            expected, "DEBUG Arguments: Namespace(verbose=3, quiet=None, colors=None)"
+        expected = self.change_namespace_for_python_lte_38(
+            expected, "DEBUG Arguments: Namespace(colors=None, quiet=None, verbose=3)"
         )
 
         self.assert_output("example1.py -vvv", expected)
@@ -142,7 +142,7 @@ class TestExamples(unittest.TestCase):
     def test_example1_with_3_long_verbose(self):
         expected = textwrap.dedent(
             """
-            DEBUG Arguments: Namespace(colors=None, quiet=None, verbose=3)
+            DEBUG Arguments: Namespace(verbose=3, quiet=None, colors=None)
             CRITICAL critical message
             ERROR error message
             WARNING warning message
@@ -152,8 +152,8 @@ class TestExamples(unittest.TestCase):
             SPAM spam message
             """
         ).strip()
-        expected = self.change_namespace_for_python39(
-            expected, "DEBUG Arguments: Namespace(verbose=3, quiet=None, colors=None)"
+        expected = self.change_namespace_for_python_lte_38(
+            expected, "DEBUG Arguments: Namespace(colors=None, quiet=None, verbose=3)"
         )
         self.assert_output("example1.py --verbose --verbose --verbose", expected)
 
@@ -274,8 +274,8 @@ class TestExamples(unittest.TestCase):
         )
 
     @staticmethod
-    def change_namespace_for_python39(original, replacement):
-        if sys.version_info.minor < 9:
+    def change_namespace_for_python_lte_38(original, replacement):
+        if sys.version_info.minor > 8:
             return original
         lines = original.splitlines()
         lines[0] = replacement
