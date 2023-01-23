@@ -40,6 +40,7 @@ __all__ = [
     # Argument parsing and bootstrap
     "bootstrap",
     "bootstrap_args",
+    "initialize",
     "add_arguments",
     "setup_file_logging",
     "args",
@@ -272,3 +273,10 @@ def bootstrap() -> verboselogs.VerboseLogger:
 
     returns logger - the logger for the main script"""
     return bootstrap_args()[0]
+
+
+def initialize() -> argparse.Namespace:
+    """Bootstraps the framework
+    
+    return args - the parsed arguments"""
+    return bootstrap_args()[1]

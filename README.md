@@ -20,6 +20,10 @@ Or:
 
 See [example2b.py](example2b.py)
 
+For bigger scripts it is good idea to encapsulate the argument parsing phase, which is typically in the main function:
+
+See [example2c.py](example2c.py)
+
 ## Progressbar works with logging, too
 
 See [example3.py](example3.py)
