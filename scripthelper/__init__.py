@@ -162,14 +162,6 @@ def getLogger(name: str = "__main__") -> verboselogs.VerboseLogger:
     return verboselogs.VerboseLogger(name)
 
 
-def get_logger(name: str = "__main__") -> verboselogs.VerboseLogger:
-    warnings.warn(
-        "get_logger is deprecated in favor of getLogger. Will be removed in 2022.",
-        category=DeprecationWarning,
-    )
-    return getLogger(name)
-
-
 args: argparse.Namespace  # Parsed arguments, will be set during bootstrap
 
 parser = argparse.ArgumentParser()
