@@ -1,8 +1,15 @@
-## 21.09.1
+## 23.01
 
-- Disable progressbar dynamically on non-tty stderr.
-- Mark Python 3.11 compatible.
-- Mark package typed.
+- Add `initialize` method for bootstrap & return args
+- Remove Python 3.6 support
+- Remove deprecated `get_logger` function. (Use `getLogger` instead.)
+- New version format: "{YEAR:2d}.{PATCH:2d}"
+
+## 22.09.1
+
+- Disable progressbar dynamically on non-tty stderr
+- Mark Python 3.11 compatible
+- Mark package typed
 
 ## 21.10.1
 
@@ -12,7 +19,7 @@
 
 - Add `warn` (`warnings.warn`)
 - Add loglevel constants
-- Make compatible with Python 3.7, 3.8, 3.9.
+- Make compatible with Python 3.7, 3.8, 3.9
 - Add docstrings
 
 ## 21.1.1
@@ -20,12 +27,12 @@
 - Make `scripthelper.args` public.
 - Upgrade `traceback_with_variables` dependency
 - Small bugfixes
-- New version format: "{YEAR}-{MONTH}-{PATCH}"
+- New version format: "{YEAR}.{MONTH}.{PATCH}"
 
 ## 1.9 / 2020-12-12
 
 - Add colored pretty printer support
-- Add getLogger method, use that by default instead of get_logger
+- Add `getLogger` method, use that by default instead of `get_logger`
 
 ## 1.8 / 2020-12-01
 
@@ -33,7 +40,7 @@
 
 ## 1.7 / 2020-10-21
 
-- Use RotatingFileHandler instead of simple FileHandler
+- Use `RotatingFileHandler` instead of simple `FileHandler`
 
 ## 1.6 / 2020-10-21
 
