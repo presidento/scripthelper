@@ -16,13 +16,9 @@ See `--help` for more information.
 
 See [example2.py](example2.py)
 
-Or:
+For bigger scripts it is good idea to have the logger at the very beginning, and encapsulate the argument parsing phase, which is typically in the main function:
 
 See [example2b.py](example2b.py)
-
-For bigger scripts it is good idea to encapsulate the argument parsing phase, which is typically in the main function:
-
-See [example2c.py](example2c.py)
 
 ## Progressbar works with logging, too
 
