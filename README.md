@@ -58,3 +58,16 @@ builtins.RuntimeError: This exception should be handled.
 ## Has built-in colored pretty printer
 
 See [example7.py](example7.py)
+
+## Has built-in persisted state handler
+
+See [example9.py](example9.py)
+
+```
+$ python example9.py
+INFO Processing item #1
+$ python example9.py
+INFO Processing item #2
+$ python example9.py
+INFO Processing item #3
+```

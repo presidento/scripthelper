@@ -273,6 +273,17 @@ class TestExamples(unittest.TestCase):
             subprocess_check=False,
         )
 
+    def test_example9(self):
+        try:
+            pathlib.Path("example9.state").unlink()
+        except FileNotFoundError:
+            # Python 3.7 has no missing_ok parameter for unlink
+            pass
+        self.assert_output("example9.py", "INFO Processing item #1")
+        self.assert_output("example9.py", "INFO Processing item #2")
+        self.assert_output("example9.py", "INFO Processing item #3")
+
+
     @staticmethod
     def change_namespace_for_python_lte_38(original, replacement):
         if sys.version_info.minor > 8:

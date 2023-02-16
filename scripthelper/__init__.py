@@ -15,6 +15,7 @@ import warnings
 from typing import Optional, Tuple
 
 import coloredlogs
+import persistedstate
 import prettyprinter
 import tqdm
 import verboselogs
@@ -239,6 +240,14 @@ def pprint(*args, **kwargs) -> None:
 
 pp = pprint
 
+class PersistedState(persistedstate.PersistedState):
+    def __init__(self, _filename=None, **kwargs):
+        filename = _filename
+        if filename is None:
+            caller_module = inspect.getmodule(inspect.stack()[1][0])
+            module_file: str = caller_module.__file__  # type:ignore
+            filename = pathlib.Path(module_file).with_suffix(".state").as_posix()
+        return super().__init__(filename, **kwargs)
 
 def bootstrap_args() -> Tuple[verboselogs.VerboseLogger, argparse.Namespace]:
     """Bootstraps the framework

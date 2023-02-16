@@ -12,3 +12,6 @@ __pycache__
 # Example log file
 /example5.log
 /example5.log.*
+
+# Example state file
+/example9.state

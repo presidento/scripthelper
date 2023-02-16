@@ -52,5 +52,6 @@ setuptools.setup(
         "verboselogs >= 1.7",
         "traceback_with_variables >= 2.0.1",
         "prettyprinter >= 0.18.0",
+        "persistedstate >= 22.2"
     ],
 )
