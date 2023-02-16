@@ -21,7 +21,7 @@ def long_description():
 
 setuptools.setup(
     name="scripthelper",
-    version="23.01",
+    version="23.02",
     scripts=[],
     author="Máté Farkas",
     author_email="fm@farkas-mate.hu",

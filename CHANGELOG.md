@@ -1,3 +1,7 @@
+## 23.02
+
+- Add persisted state handler
+
 ## 23.01
 
 - Add `initialize` method for bootstrap & return args
