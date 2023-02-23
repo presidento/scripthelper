@@ -6,7 +6,7 @@ set shell := ["powershell", "-nop", "-c"]
 # Bootstrap with all supported Python versions
 bootstrap: && compile-readme
     @foreach ($version in ('{{ SUPPORTED_VERSIONS }}' -split '\s+')) { just bootstrap-with "$version" }
-    & ".{{ DEFAULT_VERSION }}.venv\Scripts\python.exe" -m pip install mypy setuptools wheel build twine --quiet --upgrade
+    & ".{{ DEFAULT_VERSION }}.venv\Scripts\python.exe" -m pip install mypy build twine --quiet --upgrade
 
 # Set up Python environment with specified Python version
 bootstrap-with VERSION:
