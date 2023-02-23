@@ -10,10 +10,10 @@ class TestExamples(unittest.TestCase):
     def assert_output(self, command, expected, subprocess_check=True):
         output = self.run_command(command, subprocess_check)
         self.assertEqual(output.strip(), expected.strip())
-    
+
     def run_command(self, command, subprocess_check=True):
         result = subprocess.run(
-            f"\"{sys.executable}\" {command}",
+            f'"{sys.executable}" {command}',
             stderr=subprocess.PIPE,
             stdout=subprocess.PIPE,
             check=subprocess_check,
@@ -44,13 +44,15 @@ class TestExamples(unittest.TestCase):
         output = self.run_command("example1.py -h")
         usage = "usage: example1.py [-h] [-v] [-q] [--colors] [--no-colors]"
         assert usage in output
-        args_help = textwrap.dedent("""
+        args_help = textwrap.dedent(
+            """
             -h, --help     show this help message and exit
             -v, --verbose  Increase verbosity. Can be applied multiple times, like -vv
             -q, --quiet    Decrease verbosity. Can be applied multiple times, like -qq
             --colors       Force set colored output
             --no-colors    Force set non-colored output
-            """)
+            """
+        )
         for arg_help in args_help.splitlines():
             assert arg_help in output, "Missing line: " + arg_help
 
@@ -190,7 +192,7 @@ class TestExamples(unittest.TestCase):
         if log_file.is_file():
             log_file.unlink()
         try:
-            subprocess.run(f"\"{sys.executable}\" example5.py >NUL", shell=True)
+            subprocess.run(f'"{sys.executable}" example5.py >NUL', shell=True)
             log_content = log_file.read_text().strip()
         finally:
             if log_file.is_file():
@@ -279,10 +281,35 @@ class TestExamples(unittest.TestCase):
         except FileNotFoundError:
             # Python 3.7 has no missing_ok parameter for unlink
             pass
-        self.assert_output("example9.py", "INFO Processing item #1")
-        self.assert_output("example9.py", "INFO Processing item #2")
-        self.assert_output("example9.py", "INFO Processing item #3")
-
+        self.assert_output(
+            "example9.py",
+            textwrap.dedent(
+                """
+                INFO Processing item #1
+                INFO - Element 1
+                """
+            ),
+        )
+        self.assert_output(
+            "example9.py",
+            textwrap.dedent(
+                """
+                INFO Processing item #2
+                INFO - Element 1
+                INFO - Element 2
+                """
+            ),
+        )
+        self.assert_output(
+            "example9.py",
+            textwrap.dedent(
+                """
+                INFO Processing item #3
+                INFO - Element 2
+                INFO - Element 3
+                """
+            ),
+        )
 
     @staticmethod
     def change_namespace_for_python_lte_38(original, replacement):

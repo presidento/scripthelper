@@ -25,7 +25,7 @@ dependencies = [
     "verboselogs >= 1.7",
     "traceback_with_variables >= 2.0.1",
     "prettyprinter >= 0.18.0",
-    "persistedstate >= 23.1",
+    "persistedstate >= 23.6",
 ]
 
 [[project.authors]]

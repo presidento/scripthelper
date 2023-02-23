@@ -61,13 +61,22 @@ See [example7.py](example7.py)
 
 ## Has built-in persisted state handler
 
+The state is persisted immediately in the background in YAML. Mutable objects (`list`, `dict`) also can be used.
+
 See [example9.py](example9.py)
 
 ```
-$ python example9.py
+$ python3 example9.py
 INFO Processing item #1
-$ python example9.py
+INFO - Element 1
+
+$ python3 example9.py
 INFO Processing item #2
-$ python example9.py
+INFO - Element 1
+INFO - Element 2
+
+$ python3 example9.py
 INFO Processing item #3
+INFO - Element 2
+INFO - Element 3
 ```
