@@ -1,0 +1,40 @@
+[project]
+name = "scripthelper"
+version = "23.02"
+description = "Helper module for creating simple Python scripts"
+readme = "README.compiled.md"
+license = {text = "MIT License"}
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+dependencies = [
+    "tqdm >= 4.31.1",
+    "coloredlogs >= 10.0",
+    "verboselogs >= 1.7",
+    "traceback_with_variables >= 2.0.1",
+    "prettyprinter >= 0.18.0",
+    "persistedstate >= 23.1",
+]
+
+[[project.authors]]
+name = "Máté Farkas"
+email = "fm@farkas-mate.hu"
+
+[project.urls]
+Homepage = "https://github.com/presidento/scripthelper"
+Changelog = "https://github.com/presidento/scripthelper/blob/main/CHANGELOG.md"
+
+[tool.setuptools]
+package-data = {persistedstate = ["py.typed"]}
