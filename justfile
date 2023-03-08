@@ -1,45 +1,50 @@
-DEFAULT_VERSION := "3.8"
-SUPPORTED_VERSIONS := "3.7 3.8 3.9 3.10 3.11"
+set shell := ["nu", "-c"]
 
-set shell := ["powershell", "-nop", "-c"]
+DEFAULT_VERSION := "3.8"
+SUPPORTED_VERSIONS := "['3.7' '3.8' '3.9' '3.10' '3.11']"
+PYTHON_EXECUTABLE := if os_family() == "windows" { "Scripts/python.exe" } else { "bin/python3" }
+SYSTEM_PYTHON_PREFIX := if os_family() == "windows" { "py -" } else { "python" }
 
 # Bootstrap with all supported Python versions
 bootstrap: && compile-readme
-    @foreach ($version in ('{{ SUPPORTED_VERSIONS }}' -split '\s+')) { just bootstrap-with "$version" }
-    & ".{{ DEFAULT_VERSION }}.venv\Scripts\python.exe" -m pip install mypy build twine --quiet --upgrade
+    for version in {{ SUPPORTED_VERSIONS }} { just bootstrap-with $version }
+    just python {{ DEFAULT_VERSION }} -m pip install mypy build twine --quiet --upgrade
 
 # Set up Python environment with specified Python version
 bootstrap-with VERSION:
-    If (-not (Test-Path .{{ VERSION }}.venv)) { py -{{ VERSION }} -m venv .{{ VERSION }}.venv }
-    & ".{{ VERSION }}.venv\Scripts\python.exe" -m pip install pip --quiet --upgrade
-    & ".{{ VERSION }}.venv\Scripts\python.exe" -m pip install -e . --upgrade --upgrade-strategy eager
+    if not (".{{ VERSION }}.{{ os_family() }}.venv" | path exists) { {{ SYSTEM_PYTHON_PREFIX }}{{ VERSION }} -m venv .{{ VERSION }}.{{ os_family() }}.venv }
+    just python {{ VERSION }} -m pip install pip mypy setuptools wheel twine --quiet --upgrade
+    just python {{ VERSION }} -m pip install -e . --upgrade --upgrade-strategy eager
 
 # Compile README.md
 compile-readme:
-    & ".{{ DEFAULT_VERSION }}.venv\Scripts\python.exe" compile-readme.py
+    just python {{ DEFAULT_VERSION }} compile-readme.py
+
+# Run a specific Python interpreter
+python VERSION *ARGS:
+    @^".{{ VERSION }}.{{ os_family() }}.venv/{{ PYTHON_EXECUTABLE }}" {{ ARGS }}
 
 # Check static typing
 mypy:
     just clean
-    & ".{{ DEFAULT_VERSION }}.venv\Scripts\mypy.exe" src
+    just python {{ DEFAULT_VERSION }} -m mypy . src
 
 # Test with all supported Python versions
 test: mypy
-    @foreach ($version in ('{{ SUPPORTED_VERSIONS }}' -split '\s+')) { just test-with "$version" }
+    for version in {{ SUPPORTED_VERSIONS }} { just test-with $version }
 
 # Run the tests with specified Python version
 test-with VERSION:
-    & ".{{ VERSION }}.venv\Scripts\python.exe" .\test_examples.py
+    just python {{ VERSION }} test_examples.py
 
 # Remove compiled assets
 clean:
-    -Remove-Item -Recurse -Force -ErrorAction Ignore build
-    -Remove-Item -Recurse -Force -ErrorAction Ignore dist
+    rm build dist scripthelper.egg-info --force --recursive --verbose
 
 # Build the whole project, create a release
 build: clean bootstrap test compile-readme
-    & ".{{ DEFAULT_VERSION }}.venv\Scripts\python.exe" -m build
+    just python {{ DEFAULT_VERSION }} -m build
 
 # Upload the release to PyPi
 upload:
-    & ".{{ DEFAULT_VERSION }}.venv\Scripts\python.exe" -m twine upload dist/*
+    just python {{ DEFAULT_VERSION }} -m twine upload dist/*
