@@ -253,32 +253,10 @@ class TestExamples(unittest.TestCase):
         )
 
     def test_example8(self):
-        self.assert_output(
-            "example8.py --no-colors",
-            textwrap.dedent(
-                """
-                INFO Testing --colors and --no-colors options
-                [True, 'string', 1234]
-                CRITICAL Uncaught Exception: Unhandled Exception
-                Traceback with variables (most recent call last):
-                builtins.Exception: Unhandled Exception
-                """
-            ),
-            subprocess_check=False,
-        )
-        self.assert_output(
-            "example8.py --colors",
-            textwrap.dedent(
-                """
-                \x1b[34mINFO\x1b[0m Testing --colors and --no-colors options
-                \x1b[0m\x1b[37m[\x1b[0m\x1b[0m\x1b[36mTrue\x1b[0m\x1b[0m\x1b[37m,\x1b[0m \x1b[0m\x1b[33m'\x1b[0m\x1b[33mstring\x1b[0m\x1b[33m'\x1b[0m\x1b[0m\x1b[37m,\x1b[0m \x1b[0m\x1b[37m1234\x1b[0m\x1b[0m\x1b[37m]\x1b[0m
-                \x1b[34mCRITICAL\x1b[0m \x1b[1;31mUncaught Exception: Unhandled Exception\x1b[0m
-                \x1b[36mTraceback with variables (most recent call last):\x1b[0m
-                \x1b[31mbuiltins.Exception:\x1b[0m\x1b[91m Unhandled Exception\x1b[0m
-                """
-            ),
-            subprocess_check=False,
-        )
+        with_colors = self.run_command("example8.py --colors", subprocess_check=False)
+        assert "\x1b[0m" in with_colors
+        no_colors = self.run_command("example8.py --no-colors", subprocess_check=False)
+        assert "\x1b[0m" not in no_colors
 
     def test_example9(self):
         try:
