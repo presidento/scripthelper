@@ -25,13 +25,15 @@ compile-readme:
 python VERSION *ARGS:
     @^".{{ VERSION }}.{{ os_family() }}.venv/{{ PYTHON_EXECUTABLE }}" {{ ARGS }}
 
+# Run every check against source code
+check: mypy test
+
 # Check static typing
 mypy:
-    just clean
-    just python {{ DEFAULT_VERSION }} -m mypy . src
+    just python {{ DEFAULT_VERSION }} -m mypy src *.py
 
 # Test with all supported Python versions
-test: mypy
+test:
     for version in {{ SUPPORTED_VERSIONS }} { just test-with $version }
 
 # Run the tests with specified Python version
@@ -43,7 +45,7 @@ clean:
     rm build dist scripthelper.egg-info --force --recursive --verbose
 
 # Build the whole project, create a release
-build: clean bootstrap test compile-readme
+build: clean bootstrap check compile-readme
     just python {{ DEFAULT_VERSION }} -m build
 
 # Upload the release to PyPi
