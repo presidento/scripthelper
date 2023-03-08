@@ -13,7 +13,7 @@ bootstrap:
 
 # Set up Python environment with specified Python version
 bootstrap-with VERSION:
-    if not (".{{ VERSION }}.{{ os_family() }}.venv" | path exists) { {{ SYSTEM_PYTHON_PREFIX }}{{ VERSION }} -m venv .{{ VERSION }}.{{ os_family() }}.venv }
+    if not (".{{ VERSION }}.{{ os() }}.venv" | path exists) { {{ SYSTEM_PYTHON_PREFIX }}{{ VERSION }} -m venv .{{ VERSION }}.{{ os() }}.venv }
     just python {{ VERSION }} -m pip install pip mypy setuptools wheel twine --quiet --upgrade
     just python {{ VERSION }} -m pip install -e . --upgrade --upgrade-strategy eager
 
@@ -23,7 +23,7 @@ compile-readme:
 
 # Run a specific Python interpreter
 python VERSION *ARGS:
-    @^".{{ VERSION }}.{{ os_family() }}.venv/{{ PYTHON_EXECUTABLE }}" {{ ARGS }}
+    @^".{{ VERSION }}.{{ os() }}.venv/{{ PYTHON_EXECUTABLE }}" {{ ARGS }}
 
 # Run every check against source code
 check: mypy test
