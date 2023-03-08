@@ -6,7 +6,8 @@ PYTHON_EXECUTABLE := if os_family() == "windows" { "Scripts/python.exe" } else {
 SYSTEM_PYTHON_PREFIX := if os_family() == "windows" { "py -" } else { "python" }
 
 # Bootstrap with all supported Python versions
-bootstrap: && compile-readme
+bootstrap:
+    touch README.compiled.md
     for version in {{ SUPPORTED_VERSIONS }} { just bootstrap-with $version }
     just python {{ DEFAULT_VERSION }} -m pip install mypy build twine --quiet --upgrade
 
