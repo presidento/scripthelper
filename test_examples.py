@@ -13,14 +13,16 @@ class TestExamples(unittest.TestCase):
 
     def run_command(self, command, subprocess_check=True):
         # Workaround for bug with Nushell, see https://github.com/python/cpython/issues/102496
-        sys_executable = str(pathlib.Path(sys.executable).absolute()).replace('\\\\?\\', '')
+        sys_executable = str(pathlib.Path(sys.executable).absolute()).replace(
+            "\\\\?\\", ""
+        )
         result = subprocess.run(
             f'"{sys_executable}" {command}',
             stderr=subprocess.PIPE,
             stdout=subprocess.PIPE,
             check=subprocess_check,
             shell=True,
-            cwd=pathlib.Path(__file__).absolute().parent
+            cwd=pathlib.Path(__file__).absolute().parent,
         )
         # There should be nothing on non-tty stderr.
         # (The progressbar is on stderr, but only for tty stderr)
@@ -196,8 +198,12 @@ class TestExamples(unittest.TestCase):
             log_file.unlink()
         try:
             # Workaround for bug with Nushell, see https://github.com/python/cpython/issues/102496
-            sys_executable = str(pathlib.Path(sys.executable).absolute()).replace('\\\\?\\', '')
-            subprocess.run(f'"{sys_executable}" example5.py >NUL', shell=True, check=True)
+            sys_executable = str(pathlib.Path(sys.executable).absolute()).replace(
+                "\\\\?\\", ""
+            )
+            subprocess.run(
+                f'"{sys_executable}" example5.py >NUL', shell=True, check=True
+            )
             log_content = log_file.read_text().strip()
         finally:
             if log_file.is_file():

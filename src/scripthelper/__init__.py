@@ -221,7 +221,7 @@ def setup_file_logging(*, level: str = "INFO", filename: Optional[str] = None) -
 
 def progressbar(*args, disable=None, **kwargs):
     """See tqdm.tqdm
-    
+
     The default value for 'disable' is None, meaning
         - enable progressbar on terminals
         - disable progressbar on non-tty
@@ -240,6 +240,7 @@ def pprint(*args, **kwargs) -> None:
 
 pp = pprint
 
+
 class PersistedState(persistedstate.PersistedState):
     def __init__(self, _filename=None, **kwargs):
         filename = _filename
@@ -248,6 +249,7 @@ class PersistedState(persistedstate.PersistedState):
             module_file: str = caller_module.__file__  # type:ignore
             filename = pathlib.Path(module_file).with_suffix(".state").as_posix()
         return super().__init__(filename, **kwargs)
+
 
 def bootstrap_args() -> Tuple[verboselogs.VerboseLogger, argparse.Namespace]:
     """Bootstraps the framework
@@ -286,6 +288,6 @@ def bootstrap() -> verboselogs.VerboseLogger:
 
 def initialize() -> argparse.Namespace:
     """Bootstraps the framework
-    
+
     return args - the parsed arguments"""
     return bootstrap_args()[1]
