@@ -9,12 +9,12 @@ SYSTEM_PYTHON_PREFIX := if os_family() == "windows" { "py -" } else { "python" }
 bootstrap:
     touch README.compiled.md
     for version in {{ SUPPORTED_VERSIONS }} { just bootstrap-with $version }
-    just py -m pip install .[dev] --quiet --upgrade
+    just py -m pip install .[dev] --quiet --upgrade --upgrade-strategy eager
 
 # Set up Python environment with specified Python version
 bootstrap-with VERSION:
     if not (".{{ VERSION }}.{{ os() }}.venv" | path exists) { {{ SYSTEM_PYTHON_PREFIX }}{{ VERSION }} -m venv .{{ VERSION }}.{{ os() }}.venv }
-    just python {{ VERSION }} -m pip install pip mypy setuptools wheel twine --quiet --upgrade
+    just python {{ VERSION }} -m pip install pip --quiet --upgrade
     just python {{ VERSION }} -m pip install -e . --upgrade --upgrade-strategy eager
 
 # Compile README.md
@@ -27,7 +27,7 @@ python VERSION *ARGS:
 
 # Run python command with the default Python version
 py *ARGS:
-    just python {{DEFAULT_VERSION }} {{ ARGS }}
+    @just python {{DEFAULT_VERSION }} {{ ARGS }}
 
 # Run every check against source code
 check: check-format mypy test

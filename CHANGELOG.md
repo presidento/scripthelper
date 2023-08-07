@@ -1,3 +1,10 @@
+## 23.3
+
+- Add `warning_once` function
+- Remove Python 3.7 support
+- Use pyproject.toml
+- New version format: "{YEAR:2d}.{PATCH}"
+
 ## 23.02
 
 - Add persisted state handler
