@@ -27,6 +27,14 @@ dependencies = [
     "persistedstate >= 23.6",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "build",
+    "mypy",
+    "twine",
+]
+
+
 [[project.authors]]
 name = "Máté Farkas"
 email = "fm@farkas-mate.hu"

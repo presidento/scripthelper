@@ -9,7 +9,7 @@ SYSTEM_PYTHON_PREFIX := if os_family() == "windows" { "py -" } else { "python" }
 bootstrap:
     touch README.compiled.md
     for version in {{ SUPPORTED_VERSIONS }} { just bootstrap-with $version }
-    just python {{ DEFAULT_VERSION }} -m pip install mypy build twine --quiet --upgrade
+    just python {{ DEFAULT_VERSION }} -m pip install .[dev] --quiet --upgrade
 
 # Set up Python environment with specified Python version
 bootstrap-with VERSION:
