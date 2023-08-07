@@ -25,6 +25,10 @@ compile-readme:
 python VERSION *ARGS:
     @^".{{ VERSION }}.{{ os() }}.venv/{{ PYTHON_EXECUTABLE }}" {{ ARGS }}
 
+# Run python command with the default Python version
+py *ARGS:
+    just python {{DEFAULT_VERSION }} {{ ARGS }}
+
 # Run every check against source code
 check: check-format mypy test
 
