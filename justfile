@@ -1,6 +1,6 @@
 set shell := ["nu", "-c"]
 
-DEFAULT_VERSION := "'3.8'"
+DEFAULT_VERSION := "3.8"
 SUPPORTED_VERSIONS := "['3.8' '3.9' '3.10' '3.11']"
 PYTHON_EXECUTABLE := if os_family() == "windows" { "Scripts/python.exe" } else { "bin/python3" }
 SYSTEM_PYTHON_PREFIX := if os_family() == "windows" { "py -" } else { "python" }
@@ -9,7 +9,7 @@ SYSTEM_PYTHON_PREFIX := if os_family() == "windows" { "py -" } else { "python" }
 bootstrap:
     touch README.compiled.md
     for version in {{ SUPPORTED_VERSIONS }} { just bootstrap-with $version }
-    just python {{ DEFAULT_VERSION }} -m pip install .[dev] --quiet --upgrade
+    just py -m pip install .[dev] --quiet --upgrade
 
 # Set up Python environment with specified Python version
 bootstrap-with VERSION:
@@ -19,7 +19,7 @@ bootstrap-with VERSION:
 
 # Compile README.md
 compile-readme:
-    just python {{ DEFAULT_VERSION }} compile-readme.py
+    just py compile-readme.py
 
 # Run a specific Python interpreter
 python VERSION *ARGS:
@@ -34,23 +34,23 @@ check: check-format mypy test
 
 # Check source code formatting in case I forgot to format them
 check-format:
-    just python {{ DEFAULT_VERSION }} -m black --check src *.py
+    just py -m black --check src *.py
 
 # Format source code with black
 format:
-    just python {{ DEFAULT_VERSION }} -m black src *.py
+    just py -m black src *.py
 
 # Check static typing
 mypy:
-    just python {{ DEFAULT_VERSION }} -m mypy src *.py
+    just py -m mypy src *.py
 
 # Test with all supported Python versions
 test:
     for version in {{ SUPPORTED_VERSIONS }} { just test-with $version }
 
 # Run the tests with specified Python version
-test-with VERSION:
-    just python {{ VERSION }} test_examples.py
+test-with VERSION *ARGS:
+    just python {{ VERSION }} test_examples.py {{ ARGS }}
 
 # Remove compiled assets
 clean:
@@ -58,8 +58,8 @@ clean:
 
 # Build the whole project, create a release
 build: clean bootstrap check compile-readme
-    just python {{ DEFAULT_VERSION }} -m build
+    just py -m build
 
 # Upload the release to PyPi
 upload:
-    just python {{ DEFAULT_VERSION }} -m twine upload dist/*
+    just py -m twine upload dist/*
