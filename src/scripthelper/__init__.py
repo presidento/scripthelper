@@ -36,6 +36,7 @@ __all__ = [
     "VERBOSE",
     "DEBUG",
     "SPAM",
+    "warning_once",
     # Warning
     "warn",
     # Argument parsing and bootstrap
@@ -162,6 +163,19 @@ def getLogger(name: str = "__main__") -> verboselogs.VerboseLogger:
     Extends built-in logger with levels: verbose, spam
     """
     return verboselogs.VerboseLogger(name)
+
+
+_WARNING_ONCE_CACHE = set()
+
+
+def warning_once(msg, *args, **kwargs):
+    """Issue a warning only once
+
+    Only the first call will be logged with the same message."""
+    if msg in _WARNING_ONCE_CACHE:
+        return
+    _WARNING_ONCE_CACHE.add(msg)
+    logger.warning(msg, *args, **kwargs)
 
 
 args: argparse.Namespace  # Parsed arguments, will be set during bootstrap

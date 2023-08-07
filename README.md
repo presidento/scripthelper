@@ -80,3 +80,8 @@ INFO Processing item #3
 INFO - Element 2
 INFO - Element 3
 ```
+
+## Helps issue a warning only once
+
+See [example10.py](example10.py)
+

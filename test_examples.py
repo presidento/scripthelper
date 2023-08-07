@@ -304,6 +304,9 @@ class TestExamples(unittest.TestCase):
         lines[0] = replacement
         return "\n".join(lines)
 
+    def test_example10(self):
+        self.assert_output("example10.py", "WARNING Item #12 has some errors")
+
 
 if __name__ == "__main__":
     unittest.main()
