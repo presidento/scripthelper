@@ -259,11 +259,7 @@ class TestExamples(unittest.TestCase):
         assert "\x1b[0m" not in no_colors
 
     def test_example9(self):
-        try:
-            pathlib.Path("example9.state").unlink()
-        except FileNotFoundError:
-            # Python 3.7 has no missing_ok parameter for unlink
-            pass
+        pathlib.Path("example9.state").unlink(missing_ok=True)
         self.assert_output(
             "example9.py",
             textwrap.dedent(
