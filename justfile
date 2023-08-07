@@ -26,7 +26,15 @@ python VERSION *ARGS:
     @^".{{ VERSION }}.{{ os() }}.venv/{{ PYTHON_EXECUTABLE }}" {{ ARGS }}
 
 # Run every check against source code
-check: mypy test
+check: check-format mypy test
+
+# Check source code formatting in case I forgot to format them
+check-format:
+    just python {{ DEFAULT_VERSION }} -m black --check src *.py
+
+# Format source code with black
+format:
+    just python {{ DEFAULT_VERSION }} -m black src *.py
 
 # Check static typing
 mypy:
