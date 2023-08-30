@@ -1,3 +1,9 @@
+## 23.4
+
+- Use `stackprinter` module instead of `traceback_with_variables` to have pretty stack traces for unhandled exceptions
+- Allow to disable displaying variables in stack traces (`--disable-traceback-variables` command line argument)
+- Add Python 3.12 support
+
 ## 23.3
 
 - Add `warning_once` function
