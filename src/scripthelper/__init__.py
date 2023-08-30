@@ -17,12 +17,13 @@ from typing import Optional, Tuple
 import coloredlogs
 import persistedstate
 import prettyprinter
+import stackprinter
 import tqdm
 import verboselogs
 from colorful import colorful  # type: ignore
-from traceback_with_variables.core import ColorSchemes, Format, iter_exc_lines
 
 _with_colors = None
+_with_traceback_variables = True
 
 logger = logging.getLogger(__name__)
 
@@ -80,17 +81,18 @@ class CustomLogFormatter(coloredlogs.ColoredFormatter):
             return {}  # Disable coloring
 
     def formatException(self, stack_info):
-        if self.colors:
-            color_scheme = ColorSchemes.common
+        if _with_traceback_variables:
+            show_variables = "like_source"
         else:
-            color_scheme = ColorSchemes.none
+            show_variables = False
 
-        return "\n".join(
-            iter_exc_lines(
-                e=stack_info[1],
-                num_skipped_frames=1,
-                fmt=Format(color_scheme=color_scheme),
-            )
+        if self.colors:
+            color_scheme = "darkbg3"
+        else:
+            color_scheme = "plaintext"
+
+        return stackprinter.format(
+            stack_info, style=color_scheme, show_vals=show_variables
         )
 
 
@@ -205,6 +207,11 @@ parser.add_argument(
     dest="colors",
     help="Force set non-colored output",
 )
+parser.add_argument(
+    "--disable-traceback-variables",
+    action="store_true",
+    help="Do not display variables in traceback context",
+)
 
 
 def add_argument(*args, **kw) -> None:
@@ -273,6 +280,7 @@ def bootstrap_args() -> Tuple[verboselogs.VerboseLogger, argparse.Namespace]:
         And the parsed argument"""
     global args
     global _with_colors
+    global _with_traceback_variables
 
     args = parser.parse_args()
 
@@ -284,6 +292,7 @@ def bootstrap_args() -> Tuple[verboselogs.VerboseLogger, argparse.Namespace]:
             # Hack for pretty printer on force colors
             colorful.use_16_ansi_colors()
 
+    _with_traceback_variables = not args.disable_traceback_variables
     console_verbosity = (args.verbose or 0) - (args.quiet or 0)
     console_log_level = _log_level_from_verbosity(console_verbosity)
     _setup_logger(console_log_level)

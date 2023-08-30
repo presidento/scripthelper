@@ -47,15 +47,20 @@ class TestExamples(unittest.TestCase):
 
     def test_example1_help(self):
         output = self.run_command("example1.py -h")
-        usage = "usage: example1.py [-h] [-v] [-q] [--colors] [--no-colors]"
-        assert usage in output
         args_help = textwrap.dedent(
             """
-            -h, --help     show this help message and exit
-            -v, --verbose  Increase verbosity. Can be applied multiple times, like -vv
-            -q, --quiet    Decrease verbosity. Can be applied multiple times, like -qq
-            --colors       Force set colored output
-            --no-colors    Force set non-colored output
+            -h, --help
+            show this help message and exit
+            -v, --verbose
+            Increase verbosity.
+            -q, --quiet
+            Decrease verbosity.
+            --colors
+            Force set colored output
+            --no-colors
+            Force set non-colored output
+            --disable-traceback-variables
+            Do not display variables in traceback context
             """
         )
         for arg_help in args_help.splitlines():
@@ -112,7 +117,7 @@ class TestExamples(unittest.TestCase):
     def test_example1_with_2_verbose(self):
         expected = textwrap.dedent(
             """
-            DEBUG Arguments: Namespace(verbose=2, quiet=None, colors=None)
+            DEBUG Arguments: Namespace(verbose=2, quiet=None, colors=None, disable_traceback_variables=False)
             CRITICAL critical message
             ERROR error message
             WARNING warning message
@@ -122,7 +127,8 @@ class TestExamples(unittest.TestCase):
             """
         ).strip()
         expected = self.change_namespace_for_python_lte_38(
-            expected, "DEBUG Arguments: Namespace(colors=None, quiet=None, verbose=2)"
+            expected,
+            "DEBUG Arguments: Namespace(colors=None, disable_traceback_variables=False, quiet=None, verbose=2)",
         )
 
         self.assert_output("example1.py -vv", expected)
@@ -130,7 +136,7 @@ class TestExamples(unittest.TestCase):
     def test_example1_with_3_verbose(self):
         expected = textwrap.dedent(
             """
-            DEBUG Arguments: Namespace(verbose=3, quiet=None, colors=None)
+            DEBUG Arguments: Namespace(verbose=3, quiet=None, colors=None, disable_traceback_variables=False)
             CRITICAL critical message
             ERROR error message
             WARNING warning message
@@ -141,7 +147,8 @@ class TestExamples(unittest.TestCase):
             """
         ).strip()
         expected = self.change_namespace_for_python_lte_38(
-            expected, "DEBUG Arguments: Namespace(colors=None, quiet=None, verbose=3)"
+            expected,
+            "DEBUG Arguments: Namespace(colors=None, disable_traceback_variables=False, quiet=None, verbose=3)",
         )
 
         self.assert_output("example1.py -vvv", expected)
@@ -149,7 +156,7 @@ class TestExamples(unittest.TestCase):
     def test_example1_with_3_long_verbose(self):
         expected = textwrap.dedent(
             """
-            DEBUG Arguments: Namespace(verbose=3, quiet=None, colors=None)
+            DEBUG Arguments: Namespace(verbose=3, quiet=None, colors=None, disable_traceback_variables=False)
             CRITICAL critical message
             ERROR error message
             WARNING warning message
@@ -160,7 +167,8 @@ class TestExamples(unittest.TestCase):
             """
         ).strip()
         expected = self.change_namespace_for_python_lte_38(
-            expected, "DEBUG Arguments: Namespace(colors=None, quiet=None, verbose=3)"
+            expected,
+            "DEBUG Arguments: Namespace(colors=None, disable_traceback_variables=False, quiet=None, verbose=3)",
         )
         self.assert_output("example1.py --verbose --verbose --verbose", expected)
 
@@ -222,24 +230,24 @@ class TestExamples(unittest.TestCase):
         )
 
     def test_example6(self):
-        self.assert_output(
-            "example6.py",
-            textwrap.dedent(
-                """
-                WARNING example6.py:13: UserWarning: This user warning will be captured.
-                  scripthelper.warn("This user warning will be captured.")
-                
-                CRITICAL Uncaught RuntimeError: This exception should be handled.
-                Traceback with variables (most recent call last):
-                  File "example6.py", line 10, in uncaught_exception_test
-                    raise RuntimeError("This exception should be handled.")
-                      this_variable = 'will be displayed in stack trace'
-                      as_well_as = 'the other variables'
-                builtins.RuntimeError: This exception should be handled.
-                """
-            ),
+        variable_lines = [
+            "this_variable = 'will be displayed in stack trace'",
+            "as_well_as = 'the other variables'",
+        ]
+        warning_str = "This user warning will be captured."
+
+        output = self.run_command("example6.py --no-colors", subprocess_check=False)
+        assert warning_str in output
+        for variable_line in variable_lines:
+            assert variable_line in output, f"Missing: {variable_line}"
+
+        output = self.run_command(
+            "example6.py --no-colors --disable-traceback-variables",
             subprocess_check=False,
         )
+        assert warning_str in output
+        for variable_line in variable_lines:
+            assert variable_line not in output, f"Displayed: {variable_line}"
 
     def test_example7(self):
         self.assert_output(

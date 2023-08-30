@@ -43,16 +43,20 @@ See [example6.py](example6.py)
 The local variables will be displayed in stack trace, for example:
 
 ```
-WARNING C:\***\scripthelper\example6.py:13: UserWarning: This user warning will be captured.
+WARNING example6.py:6: UserWarning: This user warning will be captured.
   scripthelper.warn("This user warning will be captured.")
 
 CRITICAL Uncaught RuntimeError: This exception should be handled.
-Traceback with variables (most recent call last):
-  File "C:\***\scripthelper\example6.py", line 10, in uncaught_exception_test
-    raise RuntimeError("This exception should be handled.")
-      this_variable = 'will be displayed in stack trace'
-      as_well_as = 'the other variables'
-builtins.RuntimeError: This exception should be handled.
+File "example6.py", line 10, in <module>
+    6    scripthelper.warn("This user warning will be captured.")
+    7
+    8    this_variable = "will be displayed in stack trace"
+    9    as_well_as = "the other variables"
+--> 10   raise RuntimeError("This exception should be handled.")
+    ..................................................
+     this_variable = 'will be displayed in stack trace'
+     as_well_as = 'the other variables'
+    ..................................................
 ```
 
 ## Has built-in colored pretty printer
