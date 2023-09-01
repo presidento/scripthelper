@@ -23,7 +23,7 @@ compile-readme:
 
 # Run a specific Python interpreter
 python VERSION *ARGS:
-    @^".{{ VERSION }}.{{ os() }}.venv/{{ PYTHON_EXECUTABLE }}" {{ ARGS }}
+    @^".{{ VERSION }}.{{ os() }}.venv/{{ PYTHON_EXECUTABLE }}" -X dev {{ ARGS }}
 
 # Run python command with the default Python version
 py *ARGS:
