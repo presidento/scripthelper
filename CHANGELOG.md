@@ -1,3 +1,7 @@
+## 23.5
+
+- Show the name of the logger in the log messages (can be very helpful if you use libraries which logs too much)
+
 ## 23.4
 
 - Use `stackprinter` module instead of `traceback_with_variables` to have pretty stack traces for unhandled exceptions
