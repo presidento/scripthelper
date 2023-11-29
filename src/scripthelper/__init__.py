@@ -182,7 +182,14 @@ def getLogger(name: Optional[str] = None) -> MoreLevelsLogger:
     Extends built-in logger with levels: verbose, spam
     """
     logger = MoreLevelsLogger(name)
-
+    if name is None:
+        caller_file = None
+        this_file = pathlib.Path(__file__).absolute()
+        for frame in inspect.stack():
+            caller_file = pathlib.Path(frame.filename).absolute()
+            if caller_file != this_file:
+                break
+        logger.name = caller_file.stem
     return logger
 
 
