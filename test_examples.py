@@ -128,7 +128,7 @@ class TestExamples(unittest.TestCase):
         ).strip()
         expected = self.change_namespace_for_python_lte_38(
             expected,
-            "DEBUG __init__ Arguments: Namespace(colors=None, disable_traceback_variables=False, quiet=None, verbose=2)",
+            "DEBUG example1 Arguments: Namespace(colors=None, disable_traceback_variables=False, quiet=None, verbose=2)",
         )
 
         self.assert_output("example1.py -vv", expected)
@@ -148,7 +148,7 @@ class TestExamples(unittest.TestCase):
         ).strip()
         expected = self.change_namespace_for_python_lte_38(
             expected,
-            "DEBUG __init__ Arguments: Namespace(colors=None, disable_traceback_variables=False, quiet=None, verbose=3)",
+            "DEBUG example1 Arguments: Namespace(colors=None, disable_traceback_variables=False, quiet=None, verbose=3)",
         )
 
         self.assert_output("example1.py -vvv", expected)
@@ -168,7 +168,7 @@ class TestExamples(unittest.TestCase):
         ).strip()
         expected = self.change_namespace_for_python_lte_38(
             expected,
-            "DEBUG __init__ Arguments: Namespace(colors=None, disable_traceback_variables=False, quiet=None, verbose=3)",
+            "DEBUG example1 Arguments: Namespace(colors=None, disable_traceback_variables=False, quiet=None, verbose=3)",
         )
         self.assert_output("example1.py --verbose --verbose --verbose", expected)
 
@@ -313,11 +313,7 @@ class TestExamples(unittest.TestCase):
         return original
 
     def test_example10(self):
-        expected = "WARNING example10 Item #12 has some errors"
-        if sys.version_info.minor <= 8:
-            expected = expected.replace("example10", "__init__")
-
-        self.assert_output("example10.py", expected)
+        self.assert_output("example10.py", "WARNING example10 Item #12 has some errors")
 
 
 if __name__ == "__main__":
