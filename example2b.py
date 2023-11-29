@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import scripthelper
 
-logger = scripthelper.getLogger(__name__)
+logger = scripthelper.getLogger()
 
 
 def greet(name):

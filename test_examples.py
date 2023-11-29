@@ -37,10 +37,10 @@ class TestExamples(unittest.TestCase):
             "example1.py",
             textwrap.dedent(
                 """
-                CRITICAL critical message
-                ERROR error message
-                WARNING warning message
-                INFO info message
+                CRITICAL example1 critical message
+                ERROR example1 error message
+                WARNING example1 warning message
+                INFO example1 info message
                 """
             ),
         )
@@ -71,9 +71,9 @@ class TestExamples(unittest.TestCase):
             "example1.py -q",
             textwrap.dedent(
                 """
-                CRITICAL critical message
-                ERROR error message
-                WARNING warning message
+                CRITICAL example1 critical message
+                ERROR example1 error message
+                WARNING example1 warning message
                 """
             ),
         )
@@ -83,8 +83,8 @@ class TestExamples(unittest.TestCase):
             "example1.py -qq",
             textwrap.dedent(
                 """
-                CRITICAL critical message
-                ERROR error message
+                CRITICAL example1 critical message
+                ERROR example1 error message
                 """
             ),
         )
@@ -94,8 +94,8 @@ class TestExamples(unittest.TestCase):
             "example1.py --quiet --quiet",
             textwrap.dedent(
                 """
-                CRITICAL critical message
-                ERROR error message
+                CRITICAL example1 critical message
+                ERROR example1 error message
                 """
             ),
         )
@@ -105,11 +105,11 @@ class TestExamples(unittest.TestCase):
             "example1.py -v",
             textwrap.dedent(
                 """
-                CRITICAL critical message
-                ERROR error message
-                WARNING warning message
-                INFO info message
-                VERBOSE verbose message
+                CRITICAL example1 critical message
+                ERROR example1 error message
+                WARNING example1 warning message
+                INFO example1 info message
+                VERBOSE example1 verbose message
                 """
             ),
         )
@@ -117,18 +117,18 @@ class TestExamples(unittest.TestCase):
     def test_example1_with_2_verbose(self):
         expected = textwrap.dedent(
             """
-            DEBUG Arguments: Namespace(verbose=2, quiet=None, colors=None, disable_traceback_variables=False)
-            CRITICAL critical message
-            ERROR error message
-            WARNING warning message
-            INFO info message
-            VERBOSE verbose message
-            DEBUG debug message
+            DEBUG example1 Arguments: Namespace(verbose=2, quiet=None, colors=None, disable_traceback_variables=False)
+            CRITICAL example1 critical message
+            ERROR example1 error message
+            WARNING example1 warning message
+            INFO example1 info message
+            VERBOSE example1 verbose message
+            DEBUG example1 debug message
             """
         ).strip()
         expected = self.change_namespace_for_python_lte_38(
             expected,
-            "DEBUG Arguments: Namespace(colors=None, disable_traceback_variables=False, quiet=None, verbose=2)",
+            "DEBUG __init__ Arguments: Namespace(colors=None, disable_traceback_variables=False, quiet=None, verbose=2)",
         )
 
         self.assert_output("example1.py -vv", expected)
@@ -136,19 +136,19 @@ class TestExamples(unittest.TestCase):
     def test_example1_with_3_verbose(self):
         expected = textwrap.dedent(
             """
-            DEBUG Arguments: Namespace(verbose=3, quiet=None, colors=None, disable_traceback_variables=False)
-            CRITICAL critical message
-            ERROR error message
-            WARNING warning message
-            INFO info message
-            VERBOSE verbose message
-            DEBUG debug message
-            SPAM spam message
+            DEBUG example1 Arguments: Namespace(verbose=3, quiet=None, colors=None, disable_traceback_variables=False)
+            CRITICAL example1 critical message
+            ERROR example1 error message
+            WARNING example1 warning message
+            INFO example1 info message
+            VERBOSE example1 verbose message
+            DEBUG example1 debug message
+            SPAM example1 spam message
             """
         ).strip()
         expected = self.change_namespace_for_python_lte_38(
             expected,
-            "DEBUG Arguments: Namespace(colors=None, disable_traceback_variables=False, quiet=None, verbose=3)",
+            "DEBUG __init__ Arguments: Namespace(colors=None, disable_traceback_variables=False, quiet=None, verbose=3)",
         )
 
         self.assert_output("example1.py -vvv", expected)
@@ -156,49 +156,49 @@ class TestExamples(unittest.TestCase):
     def test_example1_with_3_long_verbose(self):
         expected = textwrap.dedent(
             """
-            DEBUG Arguments: Namespace(verbose=3, quiet=None, colors=None, disable_traceback_variables=False)
-            CRITICAL critical message
-            ERROR error message
-            WARNING warning message
-            INFO info message
-            VERBOSE verbose message
-            DEBUG debug message
-            SPAM spam message
+            DEBUG example1 Arguments: Namespace(verbose=3, quiet=None, colors=None, disable_traceback_variables=False)
+            CRITICAL example1 critical message
+            ERROR example1 error message
+            WARNING example1 warning message
+            INFO example1 info message
+            VERBOSE example1 verbose message
+            DEBUG example1 debug message
+            SPAM example1 spam message
             """
         ).strip()
         expected = self.change_namespace_for_python_lte_38(
             expected,
-            "DEBUG Arguments: Namespace(colors=None, disable_traceback_variables=False, quiet=None, verbose=3)",
+            "DEBUG __init__ Arguments: Namespace(colors=None, disable_traceback_variables=False, quiet=None, verbose=3)",
         )
         self.assert_output("example1.py --verbose --verbose --verbose", expected)
 
     def test_example2_without_arguments(self):
-        self.assert_output("example2.py", "WARNING Name was not provided")
+        self.assert_output("example2.py", "WARNING example2 Name was not provided")
 
     def test_example2_with_name_provided(self):
-        self.assert_output("example2.py --name World", "INFO Hello World")
+        self.assert_output("example2.py --name World", "INFO example2 Hello World")
 
     def test_example2b_with_name_provided(self):
-        self.assert_output("example2b.py --name Nation", "INFO Hello Nation")
+        self.assert_output("example2b.py --name Nation", "INFO example2b Hello Nation")
 
     def test_example3(self):
         self.assert_output(
             "example3.py -v",
             textwrap.dedent(
                 """
-                INFO Doing the calculations...
-                VERBOSE Iteration 0
-                VERBOSE Iteration 20
-                VERBOSE Iteration 40
-                VERBOSE Iteration 60
-                VERBOSE Iteration 80
-                INFO Done
+                INFO example3 Doing the calculations...
+                VERBOSE example3 Iteration 0
+                VERBOSE example3 Iteration 20
+                VERBOSE example3 Iteration 40
+                VERBOSE example3 Iteration 60
+                VERBOSE example3 Iteration 80
+                INFO example3 Done
                 """
             ),
         )
 
     def test_example4(self):
-        self.assert_output("example4.py", "INFO Hello from a module.")
+        self.assert_output("example4.py", "INFO example4module Hello from a module.")
 
     def test_example5(self):
         log_file = pathlib.Path("example5.log")
@@ -221,10 +221,10 @@ class TestExamples(unittest.TestCase):
             dates_removed,
             textwrap.dedent(
                 """
-                CRITICAL critical message
-                ERROR error message
-                WARNING warning message
-                INFO info message
+                CRITICAL example5 critical message
+                ERROR example5 error message
+                WARNING example5 warning message
+                INFO example5 info message
                 """
             ).strip(),
         )
@@ -278,8 +278,8 @@ class TestExamples(unittest.TestCase):
             "example9.py",
             textwrap.dedent(
                 """
-                INFO Processing item #1
-                INFO - Element 1
+                INFO example9 Processing item #1
+                INFO example9 - Element 1
                 """
             ),
         )
@@ -287,9 +287,9 @@ class TestExamples(unittest.TestCase):
             "example9.py",
             textwrap.dedent(
                 """
-                INFO Processing item #2
-                INFO - Element 1
-                INFO - Element 2
+                INFO example9 Processing item #2
+                INFO example9 - Element 1
+                INFO example9 - Element 2
                 """
             ),
         )
@@ -297,23 +297,27 @@ class TestExamples(unittest.TestCase):
             "example9.py",
             textwrap.dedent(
                 """
-                INFO Processing item #3
-                INFO - Element 2
-                INFO - Element 3
+                INFO example9 Processing item #3
+                INFO example9 - Element 2
+                INFO example9 - Element 3
                 """
             ),
         )
 
     @staticmethod
     def change_namespace_for_python_lte_38(original, replacement):
-        if sys.version_info.minor > 8:
-            return original
-        lines = original.splitlines()
-        lines[0] = replacement
-        return "\n".join(lines)
+        if sys.version_info.minor <= 8:
+            lines = original.splitlines()
+            lines[0] = replacement
+            return "\n".join(lines)
+        return original
 
     def test_example10(self):
-        self.assert_output("example10.py", "WARNING Item #12 has some errors")
+        expected = "WARNING example10 Item #12 has some errors"
+        if sys.version_info.minor <= 8:
+            expected = expected.replace("example10", "__init__")
+
+        self.assert_output("example10.py", expected)
 
 
 if __name__ == "__main__":

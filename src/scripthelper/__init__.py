@@ -24,8 +24,6 @@ from colorful import colorful  # type: ignore
 _with_colors = None
 _with_traceback_variables = True
 
-logger = logging.getLogger(__name__)
-
 __all__ = [
     # Logging
     "getLogger",
@@ -99,7 +97,9 @@ class ConsoleLogHandler(logging.StreamHandler):
     def __init__(self):
         logging.StreamHandler.__init__(self)
         self.setFormatter(
-            CustomLogFormatter("%(levelname)s %(message)s", colors=_with_colors)
+            CustomLogFormatter(
+                "%(levelname)s %(name)s %(message)s", colors=_with_colors
+            )
         )
 
     def emit(self, record):
@@ -113,7 +113,7 @@ def _exception_handler(exc_type, exc_value, exc_traceback):
         return
 
     message = f"Uncaught {exc_type.__name__}: {exc_value}"
-    logger.critical(message, exc_info=exc_value)
+    getLogger().critical(message, exc_info=exc_value)
 
 
 class MoreLevelsLogger(logging.getLoggerClass()):
@@ -142,6 +142,7 @@ def _setup_logger(console_log_level):
     if sys.platform == "win32":
         # In Windows the default black is black, which is invisible on the default terminal.
         coloredlogs.DEFAULT_FIELD_STYLES["levelname"] = {"color": "blue"}
+    coloredlogs.DEFAULT_FIELD_STYLES["name"] = {"color": "cyan", "faint": True}
 
     root_logger = logging.getLogger()
     root_logger.setLevel(min(console_log_level, logging.DEBUG))
@@ -203,7 +204,7 @@ def warning_once(msg, *args, **kwargs):
     if msg in _WARNING_ONCE_CACHE:
         return
     _WARNING_ONCE_CACHE.add(msg)
-    logger.warning(msg, *args, **kwargs)
+    getLogger().warning(msg, *args, **kwargs)
 
 
 args: argparse.Namespace  # Parsed arguments, will be set during bootstrap
@@ -259,7 +260,7 @@ def setup_file_logging(*, level: str = "INFO", filename: Optional[str] = None) -
         filename, encoding="utf-8", maxBytes=10 * 1024 * 1024, backupCount=9
     )
     formatter = CustomLogFormatter(
-        "%(asctime)s %(levelname)s %(message)s", colors=False
+        "%(asctime)s %(levelname)s %(name)s %(message)s", colors=False
     )
     file_log_handler.setFormatter(formatter)
     file_log_handler.setLevel(level)
@@ -323,9 +324,9 @@ def bootstrap_args() -> Tuple[MoreLevelsLogger, argparse.Namespace]:
     console_log_level = _log_level_from_verbosity(console_verbosity)
     _setup_logger(console_log_level)
 
+    logger = getLogger()
     logger.debug(f"Arguments: {args}")
-
-    return getLogger(), args
+    return logger, args
 
 
 def bootstrap() -> MoreLevelsLogger:

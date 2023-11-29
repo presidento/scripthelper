@@ -71,21 +71,21 @@ See [example9.py](example9.py)
 
 ```
 $ python3 example9.py
-INFO Processing item #1
-INFO - Element 1
+INFO example9 Processing item #1
+INFO example9 - Element 1
 
 $ python3 example9.py
-INFO Processing item #2
-INFO - Element 1
-INFO - Element 2
+INFO example9 Processing item #2
+INFO example9 - Element 1
+INFO example9 - Element 2
 
 $ python3 example9.py
-INFO Processing item #3
-INFO - Element 2
-INFO - Element 3
+INFO example9 Processing item #3
+INFO example9 - Element 2
+INFO example9 - Element 3
 ```
 
-## Helps issue a warning only once
+## Helps issuing a warning only once
 
 See [example10.py](example10.py)
 
