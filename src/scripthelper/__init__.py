@@ -19,7 +19,6 @@ import persistedstate
 import prettyprinter
 import stackprinter
 import tqdm
-import verboselogs
 from colorful import colorful  # type: ignore
 
 _with_colors = None
@@ -59,9 +58,9 @@ CRITICAL = logging.CRITICAL
 ERROR = logging.ERROR
 WARNING = logging.WARNING
 INFO = logging.INFO
-VERBOSE = verboselogs.VERBOSE
+VERBOSE = (logging.INFO + logging.DEBUG) // 2
 DEBUG = logging.DEBUG
-SPAM = verboselogs.SPAM
+SPAM = logging.DEBUG // 2
 warn = warnings.warn
 
 
@@ -117,11 +116,29 @@ def _exception_handler(exc_type, exc_value, exc_traceback):
     logger.critical(message, exc_info=exc_value)
 
 
+class MoreLevelsLogger(logging.getLoggerClass()):
+    def __init__(self, *args, **kw):
+        logging.Logger.__init__(self, *args, **kw)
+        self.parent = logging.getLogger()
+
+    def spam(self, msg, *args, **kw):
+        if self.isEnabledFor(SPAM):
+            self._log(SPAM, msg, args, **kw, stacklevel=2)
+
+    def verbose(self, msg, *args, **kw):
+        if self.isEnabledFor(VERBOSE):
+            self._log(VERBOSE, msg, args, **kw, stacklevel=2)
+
+
 def _setup_logger(console_log_level):
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         prettyprinter.install_extras()
-    verboselogs.install()
+
+    logging.setLoggerClass(MoreLevelsLogger)
+    logging.addLevelName(VERBOSE, "VERBOSE")
+    logging.addLevelName(SPAM, "SPAM")
+
     if sys.platform == "win32":
         # In Windows the default black is black, which is invisible on the default terminal.
         coloredlogs.DEFAULT_FIELD_STYLES["levelname"] = {"color": "blue"}
@@ -139,14 +156,14 @@ def _setup_logger(console_log_level):
 
 def _log_level_from_verbosity(console_verbosity):
     levels = [
-        logging.ERROR,
-        logging.WARNING,
-        logging.INFO,
-        verboselogs.VERBOSE,
-        logging.DEBUG,
-        verboselogs.SPAM,
+        ERROR,
+        WARNING,
+        INFO,
+        VERBOSE,
+        DEBUG,
+        SPAM,
     ]
-    default_level = logging.INFO
+    default_level = INFO
 
     new_index = levels.index(default_level) + console_verbosity
     new_index = max(0, min(len(levels) - 1, new_index))
@@ -157,14 +174,16 @@ def _log_level_from_verbosity(console_verbosity):
 ########################################################################################v
 
 
-def getLogger(name: str = "__main__") -> verboselogs.VerboseLogger:
+def getLogger(name: Optional[str] = None) -> MoreLevelsLogger:
     """Return a verbose logger for a module
 
-    It is an alias for verboselogs.VerboseLogger.
+    It is an alias for MoreLevelsLogger.
     Can be used as the logging.getLogger() method.
     Extends built-in logger with levels: verbose, spam
     """
-    return verboselogs.VerboseLogger(name)
+    logger = MoreLevelsLogger(name)
+
+    return logger
 
 
 _WARNING_ONCE_CACHE = set()
@@ -272,7 +291,7 @@ class PersistedState(persistedstate.PersistedState):
         return super().__init__(filename, **kwargs)
 
 
-def bootstrap_args() -> Tuple[verboselogs.VerboseLogger, argparse.Namespace]:
+def bootstrap_args() -> Tuple[MoreLevelsLogger, argparse.Namespace]:
     """Bootstraps the framework
 
     returns (logger, args)
@@ -302,7 +321,7 @@ def bootstrap_args() -> Tuple[verboselogs.VerboseLogger, argparse.Namespace]:
     return getLogger(), args
 
 
-def bootstrap() -> verboselogs.VerboseLogger:
+def bootstrap() -> MoreLevelsLogger:
     """Bootstraps the framework
 
     returns logger - the logger for the main script"""
