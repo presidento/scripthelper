@@ -9,7 +9,7 @@ import sys
 class TestExamples(unittest.TestCase):
     def assert_output(self, command, expected, subprocess_check=True):
         output = self.run_command(command, subprocess_check)
-        self.assertEqual(output.strip(), expected.strip())
+        self.assertEqual(expected.strip(), output.strip())
 
     def run_command(self, command, subprocess_check=True):
         # Workaround for bug with Nushell, see https://github.com/python/cpython/issues/102496
