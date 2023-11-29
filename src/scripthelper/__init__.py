@@ -116,7 +116,7 @@ def _exception_handler(exc_type, exc_value, exc_traceback):
     getLogger().critical(message, exc_info=exc_value)
 
 
-class MoreLevelsLogger(logging.getLoggerClass()):
+class MoreLevelsLogger(logging.getLoggerClass()):  # type: ignore
     def __init__(self, *args, **kw):
         logging.Logger.__init__(self, *args, **kw)
         self.parent = logging.getLogger()
@@ -189,8 +189,8 @@ def getLogger(name: Optional[str] = None) -> MoreLevelsLogger:
         for frame in inspect.stack():
             caller_file = pathlib.Path(frame.filename).absolute()
             if caller_file != this_file:
+                logger.name = caller_file.stem
                 break
-        logger.name = caller_file.stem
     return logger
 
 
