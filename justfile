@@ -1,7 +1,7 @@
 set shell := ["nu", "-c"]
 
 DEFAULT_VERSION := "3.8"
-SUPPORTED_VERSIONS := "['3.8' '3.9' '3.10' '3.11' '3.12']"
+SUPPORTED_VERSIONS := "['3.8' '3.9' '3.10' '3.11' '3.12' '3.13']"
 PYTHON_EXECUTABLE := if os_family() == "windows" { "Scripts/python.exe" } else { "bin/python3" }
 SYSTEM_PYTHON_PREFIX := if os_family() == "windows" { "py -" } else { "python" }
 
