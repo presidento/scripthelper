@@ -1,3 +1,7 @@
+## 24.1
+
+- Add Python 3.13 support
+
 ## 23.5
 
 - Show the name of the logger in the log messages (can be very helpful if you use libraries which logs too much)
