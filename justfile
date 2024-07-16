@@ -9,7 +9,7 @@ SYSTEM_PYTHON_PREFIX := if os_family() == "windows" { "py -" } else { "python" }
 bootstrap:
     touch README.compiled.md
     for version in {{ SUPPORTED_VERSIONS }} { just bootstrap-with $version }
-    just py -m pip install .[dev] --quiet --upgrade --upgrade-strategy eager
+    just py -m pip install -e .[dev] --quiet --upgrade --upgrade-strategy eager
 
 # Set up Python environment with specified Python version
 bootstrap-with VERSION:
