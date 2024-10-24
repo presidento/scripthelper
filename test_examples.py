@@ -126,11 +126,6 @@ class TestExamples(unittest.TestCase):
             DEBUG example1 debug message
             """
         ).strip()
-        expected = self.change_namespace_for_python_lte_38(
-            expected,
-            "DEBUG example1 Arguments: Namespace(colors=None, disable_traceback_variables=False, quiet=None, verbose=2)",
-        )
-
         self.assert_output("example1.py -vv", expected)
 
     def test_example1_with_3_verbose(self):
@@ -146,11 +141,6 @@ class TestExamples(unittest.TestCase):
             SPAM example1 spam message
             """
         ).strip()
-        expected = self.change_namespace_for_python_lte_38(
-            expected,
-            "DEBUG example1 Arguments: Namespace(colors=None, disable_traceback_variables=False, quiet=None, verbose=3)",
-        )
-
         self.assert_output("example1.py -vvv", expected)
 
     def test_example1_with_3_long_verbose(self):
@@ -166,10 +156,6 @@ class TestExamples(unittest.TestCase):
             SPAM example1 spam message
             """
         ).strip()
-        expected = self.change_namespace_for_python_lte_38(
-            expected,
-            "DEBUG example1 Arguments: Namespace(colors=None, disable_traceback_variables=False, quiet=None, verbose=3)",
-        )
         self.assert_output("example1.py --verbose --verbose --verbose", expected)
 
     def test_example2_without_arguments(self):
@@ -303,14 +289,6 @@ class TestExamples(unittest.TestCase):
                 """
             ),
         )
-
-    @staticmethod
-    def change_namespace_for_python_lte_38(original, replacement):
-        if sys.version_info.minor <= 8:
-            lines = original.splitlines()
-            lines[0] = replacement
-            return "\n".join(lines)
-        return original
 
     def test_example10(self):
         self.assert_output("example10.py", "WARNING example10 Item #12 has some errors")

@@ -5,6 +5,7 @@ one file, and you can start working immediately.
 
 The output will be colored with support of multiple
 log levels, easy-to-add command line arguments, etc."""
+
 import argparse
 import inspect
 import logging
