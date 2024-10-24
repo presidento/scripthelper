@@ -1,6 +1,6 @@
 [project]
 name = "scripthelper"
-version = "24.1"
+version = "24.2"
 description = "Helper module for creating simple Python scripts"
 readme = "README.compiled.md"
 license = {text = "MIT License"}
@@ -10,7 +10,6 @@ classifiers = [
     "Intended Audience :: System Administrators",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
