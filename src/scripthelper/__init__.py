@@ -119,8 +119,8 @@ def _exception_handler(exc_type, exc_value, exc_traceback):
 
 class MoreLevelsLogger(logging.getLoggerClass()):  # type: ignore
     def __init__(self, *args, **kw):
-        logging.Logger.__init__(self, *args, **kw)
-        self.parent = logging.getLogger()
+        super().__init__(*args, **kw)
+        # self.parent = logging.getLogger()
 
     def spam(self, msg, *args, **kw):
         if self.isEnabledFor(SPAM):
@@ -151,6 +151,7 @@ def _setup_logger(console_log_level):
     console_log_handler = ConsoleLogHandler()
     console_log_handler.setLevel(console_log_level)
     root_logger.addHandler(console_log_handler)
+    set_supressed_log_levels()
 
     sys.excepthook = _exception_handler
     logging.captureWarnings(True)
@@ -175,6 +176,25 @@ def _log_level_from_verbosity(console_verbosity):
 
 ########################################################################################v
 
+SUPRESSED_INFO_LOGS = set()
+
+def supress_info_logs(name):
+    SUPRESSED_INFO_LOGS.add(name)
+    set_supressed_log_levels()
+
+def set_supressed_log_levels():
+    console_handler = None
+    for handler in logging.getLogger().handlers:
+        if isinstance(handler, ConsoleLogHandler):
+            console_handler = handler
+    if console_handler is None:
+        return
+    if console_handler.level <= DEBUG:
+        log_level = logging.NOTSET
+    else:
+        log_level = WARNING
+    for name in SUPRESSED_INFO_LOGS:
+        getLogger(name).setLevel(log_level)
 
 def getLogger(name: Optional[str] = None) -> MoreLevelsLogger:
     """Return a verbose logger for a module
