@@ -13,7 +13,7 @@ bootstrap:
 
 # Set up Python environment with specified Python version
 bootstrap-with VERSION:
-    if not (".{{ VERSION }}.{{ os() }}.venv" | path exists) { {{ SYSTEM_PYTHON_PREFIX }}{{ VERSION }} -m venv .{{ VERSION }}.{{ os() }}.venv }
+    if not (".{{ VERSION }}.{{ os() }}.venv" | path exists) { {{ SYSTEM_PYTHON_PREFIX }}{{ VERSION }} -m virtualenv .{{ VERSION }}.{{ os() }}.venv }
     just python {{ VERSION }} -m pip install pip --quiet --upgrade
     just python {{ VERSION }} -m pip install -e . --upgrade --upgrade-strategy eager
 
