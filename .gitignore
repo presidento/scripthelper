@@ -1,4 +1,8 @@
-/.3.*.venv
+/.tox/
+/.venv/
+
+# Always test with the latest version
+uv.lock
 
 __pycache__
 .vscode

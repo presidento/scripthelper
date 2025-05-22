@@ -18,6 +18,8 @@ classifiers = [
     "Topic :: Utilities",
     "Typing :: Typed",
 ]
+requires-python = ">=3.9"
+
 dependencies = [
     "tqdm >= 4.31.1",
     "coloredlogs >= 10.0",
@@ -26,13 +28,20 @@ dependencies = [
     "persistedstate >= 23.6",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "black",
-    "build",
     "mypy",
-    "twine",
+    "tox-uv>=1.25",
+    "tox",
+    "uv",
 ]
+
+[tool.tox]
+env_list = ["py313", "py312", "py311", "py310", "py39"]
+
+[tool.tox.env_run_base]
+commands = [["python", "test_examples.py"]]
 
 
 [[project.authors]]
