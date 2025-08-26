@@ -48,4 +48,4 @@ build: clean bootstrap check compile-readme
 
 # Upload the release to PyPi
 upload:
-    uv upload
+    uv publish
