@@ -195,7 +195,7 @@ def getLogger(name: Optional[str] = None) -> MoreLevelsLogger:
     return logger
 
 
-_WARNING_ONCE_CACHE = set()
+_WARNING_ONCE_CACHE: set[str] = set()
 
 
 def warning_once(msg, *args, **kwargs):
@@ -254,7 +254,7 @@ def setup_file_logging(*, level: str = "INFO", filename: Optional[str] = None) -
     It uses RotatingFileHandler."""
     if filename is None:
         caller_module = inspect.getmodule(inspect.stack()[1][0])
-        module_file: str = caller_module.__file__  # type:ignore
+        module_file: str = caller_module.__file__  # type: ignore
         filename = pathlib.Path(module_file).with_suffix(".log").as_posix()
 
     file_log_handler = logging.handlers.RotatingFileHandler(
@@ -295,7 +295,7 @@ class PersistedState(persistedstate.PersistedState):
         filename = _filename
         if filename is None:
             caller_module = inspect.getmodule(inspect.stack()[1][0])
-            module_file: str = caller_module.__file__  # type:ignore
+            module_file: str = caller_module.__file__  # type: ignore
             filename = pathlib.Path(module_file).with_suffix(".state").as_posix()
         return super().__init__(filename, **kwargs)
 

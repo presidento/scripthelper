@@ -1,3 +1,9 @@
+## 26.1
+
+- Add Python 3.15 support
+- Remove Python 3.9 support
+- Remove Python 3.10 support
+
 ## 25.1
 
 - Add Python 3.14 support

@@ -31,20 +31,17 @@ class TestExamples(unittest.TestCase):
     def test_example1_without_arguments(self):
         self.assert_output(
             "example1.py",
-            textwrap.dedent(
-                """
+            textwrap.dedent("""
                 CRITICAL example1 critical message
                 ERROR example1 error message
                 WARNING example1 warning message
                 INFO example1 info message
-                """
-            ),
+                """),
         )
 
     def test_example1_help(self):
         output = self.run_command("example1.py -h")
-        args_help = textwrap.dedent(
-            """
+        args_help = textwrap.dedent("""
             -h, --help
             show this help message and exit
             -v, --verbose
@@ -57,62 +54,52 @@ class TestExamples(unittest.TestCase):
             Force set non-colored output
             --disable-traceback-variables
             Do not display variables in traceback context
-            """
-        )
+            """)
         for arg_help in args_help.splitlines():
             assert arg_help in output, "Missing line: " + arg_help
 
     def test_example1_with_1_quiet(self):
         self.assert_output(
             "example1.py -q",
-            textwrap.dedent(
-                """
+            textwrap.dedent("""
                 CRITICAL example1 critical message
                 ERROR example1 error message
                 WARNING example1 warning message
-                """
-            ),
+                """),
         )
 
     def test_example1_with_2_quiet(self):
         self.assert_output(
             "example1.py -qq",
-            textwrap.dedent(
-                """
+            textwrap.dedent("""
                 CRITICAL example1 critical message
                 ERROR example1 error message
-                """
-            ),
+                """),
         )
 
     def test_example1_with_2_long_quiet(self):
         self.assert_output(
             "example1.py --quiet --quiet",
-            textwrap.dedent(
-                """
+            textwrap.dedent("""
                 CRITICAL example1 critical message
                 ERROR example1 error message
-                """
-            ),
+                """),
         )
 
     def test_example1_with_1_verbose(self):
         self.assert_output(
             "example1.py -v",
-            textwrap.dedent(
-                """
+            textwrap.dedent("""
                 CRITICAL example1 critical message
                 ERROR example1 error message
                 WARNING example1 warning message
                 INFO example1 info message
                 VERBOSE example1 verbose message
-                """
-            ),
+                """),
         )
 
     def test_example1_with_2_verbose(self):
-        expected = textwrap.dedent(
-            """
+        expected = textwrap.dedent("""
             DEBUG example1 Arguments: Namespace(verbose=2, quiet=None, colors=None, disable_traceback_variables=False)
             CRITICAL example1 critical message
             ERROR example1 error message
@@ -120,13 +107,11 @@ class TestExamples(unittest.TestCase):
             INFO example1 info message
             VERBOSE example1 verbose message
             DEBUG example1 debug message
-            """
-        ).strip()
+            """).strip()
         self.assert_output("example1.py -vv", expected)
 
     def test_example1_with_3_verbose(self):
-        expected = textwrap.dedent(
-            """
+        expected = textwrap.dedent("""
             DEBUG example1 Arguments: Namespace(verbose=3, quiet=None, colors=None, disable_traceback_variables=False)
             CRITICAL example1 critical message
             ERROR example1 error message
@@ -135,13 +120,11 @@ class TestExamples(unittest.TestCase):
             VERBOSE example1 verbose message
             DEBUG example1 debug message
             SPAM example1 spam message
-            """
-        ).strip()
+            """).strip()
         self.assert_output("example1.py -vvv", expected)
 
     def test_example1_with_3_long_verbose(self):
-        expected = textwrap.dedent(
-            """
+        expected = textwrap.dedent("""
             DEBUG example1 Arguments: Namespace(verbose=3, quiet=None, colors=None, disable_traceback_variables=False)
             CRITICAL example1 critical message
             ERROR example1 error message
@@ -150,8 +133,7 @@ class TestExamples(unittest.TestCase):
             VERBOSE example1 verbose message
             DEBUG example1 debug message
             SPAM example1 spam message
-            """
-        ).strip()
+            """).strip()
         self.assert_output("example1.py --verbose --verbose --verbose", expected)
 
     def test_example2_without_arguments(self):
@@ -166,8 +148,7 @@ class TestExamples(unittest.TestCase):
     def test_example3(self):
         self.assert_output(
             "example3.py -v",
-            textwrap.dedent(
-                """
+            textwrap.dedent("""
                 INFO example3 Doing the calculations...
                 VERBOSE example3 Iteration 0
                 VERBOSE example3 Iteration 20
@@ -175,8 +156,7 @@ class TestExamples(unittest.TestCase):
                 VERBOSE example3 Iteration 60
                 VERBOSE example3 Iteration 80
                 INFO example3 Done
-                """
-            ),
+                """),
         )
 
     def test_example4(self):
@@ -197,14 +177,12 @@ class TestExamples(unittest.TestCase):
         dates_removed = "\n".join([line[20:] for line in log_content.splitlines()])
         self.assertEqual(
             dates_removed,
-            textwrap.dedent(
-                """
+            textwrap.dedent("""
                 CRITICAL example5 critical message
                 ERROR example5 error message
                 WARNING example5 warning message
                 INFO example5 info message
-                """
-            ).strip(),
+                """).strip(),
         )
 
     def test_example6(self):
@@ -230,8 +208,7 @@ class TestExamples(unittest.TestCase):
     def test_example7(self):
         self.assert_output(
             "example7.py",
-            textwrap.dedent(
-                """
+            textwrap.dedent("""
                 {
                     'string': 'value1',
                     'bool': True,
@@ -239,8 +216,7 @@ class TestExamples(unittest.TestCase):
                     'integer': 1234,
                     'item': Item(name='name', value=999)
                 }
-                """
-            ),
+                """),
             subprocess_check=False,
         )
 
@@ -254,32 +230,26 @@ class TestExamples(unittest.TestCase):
         pathlib.Path("example9.state").unlink(missing_ok=True)
         self.assert_output(
             "example9.py",
-            textwrap.dedent(
-                """
+            textwrap.dedent("""
                 INFO example9 Processing item #1
                 INFO example9 - Element 1
-                """
-            ),
+                """),
         )
         self.assert_output(
             "example9.py",
-            textwrap.dedent(
-                """
+            textwrap.dedent("""
                 INFO example9 Processing item #2
                 INFO example9 - Element 1
                 INFO example9 - Element 2
-                """
-            ),
+                """),
         )
         self.assert_output(
             "example9.py",
-            textwrap.dedent(
-                """
+            textwrap.dedent("""
                 INFO example9 Processing item #3
                 INFO example9 - Element 2
                 INFO example9 - Element 3
-                """
-            ),
+                """),
         )
 
     def test_example10(self):
